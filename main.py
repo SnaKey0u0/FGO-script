@@ -27,9 +27,17 @@ if __name__ == '__main__':
     use_class = "術"  # 無用
     use_server = "CBA"
     instructions = list()
-    wave_1 = [[2, 1, 1], [3, 1, 1], ["CLOTH", 3, 1], ["ATTACK", 1]]
+
+    # 雙CBA不換人(2003)
+    # wave_1 = [[2, 1, 1], [3, 1, 1], ["CLOTH", 3, 1], ["ATTACK", 1]]
+    # wave_2 = [[1, 3], [2, 3, 1], ["ATTACK", 1]]
+    # wave_3 = [[2, 2], [3, 2], [3, 3, 1], ["ATTACK", 1]]
+
+    # 尼祿換人3T
+    wave_1 = [[2, 1, 1], [2, 2, 1], ["CLOTH", 3, 2, 6], [2, 1, 1], [3, 1, 1], ["ATTACK", 1]]
     wave_2 = [[1, 3], [2, 3, 1], ["ATTACK", 1]]
     wave_3 = [[2, 2], [3, 2], [3, 3, 1], ["ATTACK", 1]]
+
     instructions.append(wave_1)
     instructions.append(wave_2)
     instructions.append(wave_3)

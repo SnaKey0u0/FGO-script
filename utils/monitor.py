@@ -80,14 +80,54 @@ def grab_screen_and_click(target_filename):
     return click_match(rectangles)
 
 
-def wait_wave():
+def wait_until(target_filename):
     with mss() as sct:
         while True:
-            time.sleep(0.5)
+            time.sleep(0.3)
             print("waiting")
             myScreen = sct.shot(mon=config_data["screen_num"], output='imgs/myScreen.png')
-            rectangles = match_img(myScreen, "wave")
+            rectangles = match_img(myScreen, target_filename)
             if len(rectangles) > 0:
-                print("enter a new wave")
-                time.sleep(5)
+                if target_filename=="wave":
+                    print("enter a new wave")
+                    time.sleep(8)
+                else:
+                    print("end game")
                 break
+
+
+def switch_server(front, back):
+    with mss() as sct:
+        myScreen = sct.shot(mon=config_data["screen_num"], output='imgs/myScreen.png')
+    img = cv2.imread(myScreen)
+    img = img[375:650, 95:1780]
+    img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
+    oring = img
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    img = cv2.medianBlur(img, 15)
+    img = cv2.threshold(img, 40, 255, cv2.THRESH_BINARY)[1]
+    # img = cv2.Canny(img, 400, 800)
+    kernel = np.ones((5, 5), np.uint8)
+    # img = cv2.morphologyEx(img,cv2.MORPH_CLOSE, kernel)
+    # img = cv2.morphologyEx(img,cv2.MORPH_OPEN, kernel)
+    img = cv2.dilate(img, kernel, iterations=4)
+    img = cv2.erode(img, kernel, iterations=2)
+    contours, hierarchy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours = contours[5::-1]
+    M = cv2.moments(contours[front-1])
+    cX = int(M["m10"] / M["m00"])
+    cY = int(M["m01"] / M["m00"])
+    click(cX*2+95,cY*2+375)
+    time.sleep(1)
+    M = cv2.moments(contours[back-1])
+    cX = int(M["m10"] / M["m00"])
+    cY = int(M["m01"] / M["m00"])
+    click(cX*2+95,cY*2+375)
+    time.sleep(1)
+    # for c in contours[5::-1]:
+    #     M = cv2.moments(c)
+    #     cX = int(M["m10"] / M["m00"])
+    #     cY = int(M["m01"] / M["m00"])
+    #     cv2.circle(oring, (cX, cY), 15, (0, 255, 255), 2)
+    #     cv2.drawContours(oring, [c], -1, (0, 255, 0), 2)
+    # show_img(oring)
