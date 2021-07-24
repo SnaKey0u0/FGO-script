@@ -1,3 +1,4 @@
+import sys
 import cv2
 import time
 import numpy as np
@@ -21,7 +22,7 @@ def show_img(img):
 
 
 def click_match(rectangles):
-    # 回傳第一個位置
+    # 點擊第一個位置
     if(len(rectangles) > 0):
         (x, y, w, h) = rectangles[0]
         click(x*(1/rate)+w//2, y*(1/rate)+h//2)
@@ -30,10 +31,18 @@ def click_match(rectangles):
         print("no match")
         return False
 
+def grab_screen():
+    # The simplest use, save a screen shot of the 1st monitor
+    with mss() as sct:
+        # myScreen = sct.shot(mon=config_data["screen_num"], output='imgs/myScreen.png')
+        sct_img = np.array(sct.grab(sct.monitors[config_data["screen_num"]]))
+    # mss.tools.to_png(sct_img.rgb, sct_img.size, output='imgs/myScreen.png')
+    # match_img('imgs/myScreen.png')
+    return cv2.cvtColor(sct_img,cv2.COLOR_BGRA2BGR)
+
 
 def match_img(myScreen, target_filename):
-    img = cv2.imread(myScreen)
-    img = cv2.resize(img, (0, 0), fy=rate, fx=rate)
+    img = cv2.resize(myScreen, (0, 0), fy=rate, fx=rate)
     target_img = cv2.imread('imgs/'+target_filename+'.png')
     target_img = cv2.resize(target_img, (0, 0), fy=rate, fx=rate)
 
@@ -69,38 +78,35 @@ def match_img(myScreen, target_filename):
 
 
 def grab_screen_and_click(target_filename):
-    # The simplest use, save a screen shot of the 1st monitor
-    with mss() as sct:
-        myScreen = sct.shot(mon=config_data["screen_num"], output='imgs/myScreen.png')
-        # sct_img = np.array(sct.grab(monitor))
-    #     mss.tools.to_png(sct_img.rgb, sct_img.size, output='imgs/myScreen.png')
-    # match_img('imgs/myScreen.png')
+    myScreen = grab_screen()
     print("matching "+target_filename)
     rectangles = match_img(myScreen, target_filename)
     return click_match(rectangles)
 
 
 def wait_until(target_filename):
-    with mss() as sct:
-        while True:
-            time.sleep(0.3)
-            print("waiting")
-            myScreen = sct.shot(mon=config_data["screen_num"], output='imgs/myScreen.png')
-            rectangles = match_img(myScreen, target_filename)
-            if len(rectangles) > 0:
-                if target_filename=="wave":
-                    print("enter a new wave")
-                    time.sleep(8)
-                else:
-                    print("end game")
-                break
+    start = time.time()
+    while True:
+        now = time.time()
+        if (now - start) > 30:
+            print("opps! something went wrong, script stop!")
+            sys.exit()
+        time.sleep(0.3)
+        print("waiting")
+        myScreen = grab_screen()
+        rectangles = match_img(myScreen, target_filename)
+        if len(rectangles) > 0:
+            if target_filename=="wave":
+                print("enter a new wave")
+                time.sleep(8)
+            else:
+                print("end game")
+            break
 
 
 def switch_server(front, back):
-    with mss() as sct:
-        myScreen = sct.shot(mon=config_data["screen_num"], output='imgs/myScreen.png')
-    img = cv2.imread(myScreen)
-    img = img[375:650, 95:1780]
+    myScreen = grab_screen()
+    img = myScreen[375:650, 95:1780]
     img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
     oring = img
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)

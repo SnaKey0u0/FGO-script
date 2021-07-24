@@ -1,3 +1,4 @@
+import sys
 import time
 from random import randint
 from utils.monitor import *
@@ -17,9 +18,11 @@ def print_config():
 
 def start_playing(info_obj):
     for i in range(info_obj["loop"]):
+        print("loop: "+str(i+1))
         if not grab_screen_and_click("select_episode1"):
             grab_screen_and_click("select_episode2")
-        time.sleep(2)
+        time.sleep(1)
+        eat_apple()
         first = True
         while not grab_screen_and_click(info_obj["server"]):
             if first:
@@ -29,12 +32,14 @@ def start_playing(info_obj):
             grab_screen_and_click("refresh")
             time.sleep(1)
             grab_screen_and_click("yes")
-            time.sleep(2)
-        time.sleep(2)
+            time.sleep(4)
+        # 進關前倒數
+        time.sleep(4)
         grab_screen_and_click("start_episode")
         for wave in info_obj["instructions"]:
             wait_until("wave")
             for step in wave:
+                print("exe ins")
                 # 特殊指令
                 if isinstance(step[0], str):
                     if step[0] == "CLOTH":
@@ -45,16 +50,12 @@ def start_playing(info_obj):
                 else:
                     pos = config_data["skill"+str(step[0])+str(step[1])]
                     click(pos[0], pos[1])
-
-                    if(len(step) == 2):
-                        time.sleep(4)
-                    else:
-                        time.sleep(1)
-                    # 若是指定技
+                    time.sleep(1)
+                    # 指定技
                     if (len(step) == 3):
                         pos = config_data["select"+str(step[2])]
                         click(pos[0], pos[1])
-                        time.sleep(4)
+                    time.sleep(4)
         wait_until("click_screen")
         ending_game()
         time.sleep(8)
@@ -66,25 +67,23 @@ def use_cloth(step):
     time.sleep(1)
     pos = config_data["master-skill"+str(step[0])]
     click(pos[0], pos[1])
-    time.sleep(2)
-
+    time.sleep(1)
     # 指定技能
     if len(step) == 2:
         pos = config_data["select"+str(step[1])]
         click(pos[0], pos[1])
-        time.sleep(2)
 
     # 換人
     elif len(step) == 3:
-        switch_server(step[1], step[2])
-        # pos = config_data["switch_pick"+str(step[1])]
-        # click(pos[0], pos[1])
-        # time.sleep(1)
-        # pos = config_data["switch_pick"+str(step[2])]
-        # click(pos[0], pos[1])
+        # switch_server(step[1], step[2])
+        pos = config_data["switch_pick"+str(step[1])]
+        click(pos[0], pos[1])
+        time.sleep(1)
+        pos = config_data["switch_pick"+str(step[2])]
+        click(pos[0], pos[1])
+        time.sleep(1)
         grab_screen_and_click("switch")
-        time.sleep(2)
-    time.sleep(2)
+    time.sleep(4)
 
 
 def use_ult(step):
@@ -98,19 +97,28 @@ def use_ult(step):
     time.sleep(1)
     pos = config_data["card2"]
     click(pos[0], pos[1])
-    time.sleep(1)
 
 
 def ending_game():
     grab_screen_and_click("click_screen")
-    time.sleep(2)
+    time.sleep(3)
     grab_screen_and_click("click_screen")
-    time.sleep(2)
+    time.sleep(3)
     grab_screen_and_click("next")
-    time.sleep(1)
+    time.sleep(3)
     grab_screen_and_click("close")
 
 
 def eat_apple():
-    grab_screen_and_click("click_screen")
+    if not grab_screen_and_click("silver_apple"):
+        if not grab_screen_and_click("gold_apple"):
+            if not grab_screen_and_click("confirm"):
+                print("already in episode")
+            else:
+                print("no apple left")
+                sys.exit()
+            return False
     time.sleep(1)
+    grab_screen_and_click("confirm")
+    time.sleep(4)
+    return True
