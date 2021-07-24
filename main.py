@@ -20,7 +20,7 @@ def testshot():
 
 if __name__ == '__main__':
     # 基本設定
-    loop = 2  # 無用
+    loop = 2
 
     # 流程設定
     use_team = 3  # 無用
@@ -49,3 +49,4 @@ if __name__ == '__main__':
                 "server": use_server,
                 "instructions": instructions}
     gogo(info_obj)
+    # testshot()
