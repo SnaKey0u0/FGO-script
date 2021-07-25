@@ -4,8 +4,11 @@ from utils.executor import start_playing, set_config as set_executor
 from utils.monitor import set_config as set_monitor
 from utils.mouse_clicker import set_config as set_mouse_clicker
 
+config_data = {}
+
 
 def gogo(info_obj):
+    global config_data
     config_data = load_config()
     set_executor(config_data)
     set_monitor(config_data)
@@ -15,7 +18,7 @@ def gogo(info_obj):
 
 def testshot():
     with mss() as sct:
-        sct.shot(mon=1, output='imgs/myScreen.png')
+        sct.shot(mon=config_data["screen_num"], output='imgs/myScreen.png')
 
 
 if __name__ == '__main__':
