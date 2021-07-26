@@ -19,14 +19,18 @@ def print_config():
 def start_playing(info_obj):
     for i in range(info_obj["loop"]):
         print("loop: "+str(i+1))
+        first_enter = False
         if not grab_screen_and_click("select_episode1"):
-            grab_screen_and_click("select_episode2")
+            first_enter = True
+            if not grab_screen_and_click("select_episode2"):
+                print("opps! something went wrong, script stop!")
+                sys.exit()
         time.sleep(1)
         eat_apple()
-        first = True
+        first_refresh = True
         while not grab_screen_and_click(info_obj["server"]):
-            if first:
-                first = False
+            if first_refresh:
+                first_refresh = False
             else:
                 time.sleep(10)
             grab_screen_and_click("refresh")
@@ -59,6 +63,10 @@ def start_playing(info_obj):
         wait_until("click_screen")
         ending_game()
         time.sleep(8)
+        if first_enter:
+            first_enter = False
+            grab_screen_and_click("click_screen")
+            time.sleep(4)
 
 
 def use_cloth(step):
@@ -75,13 +83,13 @@ def use_cloth(step):
 
     # 換人
     elif len(step) == 3:
-        # switch_server(step[1], step[2])
-        pos = config_data["switch_pick"+str(step[1])]
-        click(pos[0], pos[1])
-        time.sleep(1)
-        pos = config_data["switch_pick"+str(step[2])]
-        click(pos[0], pos[1])
-        time.sleep(1)
+        switch_server(step[1], step[2])
+        # pos = config_data["switch_pick"+str(step[1])]
+        # click(pos[0], pos[1])
+        # time.sleep(1)
+        # pos = config_data["switch_pick"+str(step[2])]
+        # click(pos[0], pos[1])
+        # time.sleep(1)
         grab_screen_and_click("switch")
     time.sleep(4)
 
@@ -114,10 +122,11 @@ def eat_apple():
         if not grab_screen_and_click("gold_apple"):
             if not grab_screen_and_click("confirm"):
                 print("already in episode")
+                time.sleep(1)
+                return False
             else:
                 print("no apple left")
                 sys.exit()
-            return False
     time.sleep(1)
     grab_screen_and_click("confirm")
     time.sleep(4)

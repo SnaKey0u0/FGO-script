@@ -30,7 +30,7 @@ if __name__ == '__main__':
     load_and_set()
 
     # 基本設定
-    loop = 2
+    loop = 1
 
     # 流程設定
     use_team = 3  # 無用
