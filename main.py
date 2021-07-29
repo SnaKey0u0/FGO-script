@@ -21,7 +21,7 @@ def gogo(info_obj):
 
 def testshot():
     with mss() as sct:
-        sct.shot(mon=config_data["screen_num"], output='imgs/myScreen.png')
+        sct.shot(mon=config_data["screen_num"], output='myScreen.png')
 
 
 if __name__ == '__main__':

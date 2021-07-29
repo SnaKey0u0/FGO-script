@@ -121,6 +121,7 @@ def switch_server(front, back):
     img = cv2.dilate(img, kernel, iterations=4)
     img = cv2.erode(img, kernel, iterations=1)
     contours, hierarchy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    print(hierarchy)
     contours = contours[5::-1]
     M = cv2.moments(contours[front-1])
     cX = int(M["m10"] / M["m00"])

@@ -83,13 +83,13 @@ def use_cloth(step):
 
     # 換人
     elif len(step) == 3:
-        switch_server(step[1], step[2])
-        # pos = config_data["switch_pick"+str(step[1])]
-        # click(pos[0], pos[1])
-        # time.sleep(1)
-        # pos = config_data["switch_pick"+str(step[2])]
-        # click(pos[0], pos[1])
-        # time.sleep(1)
+        # switch_server(step[1], step[2])
+        pos = config_data["switch_pick"+str(step[1])]
+        click(pos[0], pos[1])
+        time.sleep(1)
+        pos = config_data["switch_pick"+str(step[2])]
+        click(pos[0], pos[1])
+        time.sleep(1)
         grab_screen_and_click("switch")
     time.sleep(4)
 
@@ -114,8 +114,10 @@ def ending_game():
     time.sleep(3)
     grab_screen_and_click("next")
     time.sleep(3)
+    if grab_screen_and_click("no_apply"):
+        time.sleep(1)
     grab_screen_and_click("close")
-
+    time.sleep(3)
 
 def eat_apple():
     if not grab_screen_and_click("silver_apple"):
