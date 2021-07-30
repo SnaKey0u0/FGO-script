@@ -93,7 +93,7 @@ def wait_until(target_filename):
             print("opps! something went wrong, script stop!")
             sys.exit()
         time.sleep(0.3)
-        print("waiting")
+        print("waiting for", target_filename)
         myScreen = grab_screen()
         rectangles = match_img(myScreen, target_filename)
         if len(rectangles) > 0:

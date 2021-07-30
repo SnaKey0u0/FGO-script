@@ -30,7 +30,7 @@ if __name__ == '__main__':
     load_and_set()
 
     # 基本設定
-    loop = 1
+    loop = 2
 
     # 流程設定
     use_team = 3  # 無用
@@ -56,9 +56,14 @@ if __name__ == '__main__':
     # wave_3 = [[2, 2], [3, 2], [3, 3, 1], ["ATTACK", 1]]
 
     # 尼祿換人3T
-    wave_1 = [[2, 1, 1], [2, 2, 1], ["CLOTH", 3, 2, 6], [2, 1, 1], [3, 1, 1], ["ATTACK", 1]]
-    wave_2 = [[1, 3], [2, 3, 1], ["ATTACK", 1]]
-    wave_3 = [[2, 2], [3, 2], [3, 3, 1], ["ATTACK", 1]]
+    # wave_1 = [[2, 1, 1], [2, 2, 1], ["CLOTH", 3, 2, 6], [2, 1, 1], [3, 1, 1], ["ATTACK", 1]]
+    # wave_2 = [[1, 3], [2, 3, 1], ["ATTACK", 1]]
+    # wave_3 = [[2, 2], [3, 2], [3, 3, 1], ["ATTACK", 1]]
+
+    # 尼祿換人3T V2
+    wave_1 = [[2, 1, 1], [3, 1, 1], ["ATTACK", 1]]
+    wave_2 = [[2, 2], [2, 3, 1], ["CLOTH", 3, 2, 6], [1, 3], [2, 1, 1], [2, 2, 1], ["ATTACK", 1]]
+    wave_3 = [[3, 2], [3, 3, 1], ["ATTACK", 1]]
 
     instructions.append(wave_1)
     instructions.append(wave_2)

@@ -67,6 +67,7 @@ def start_playing(info_obj):
             first_enter = False
             grab_screen_and_click("click_screen")
             time.sleep(4)
+    print("finished")
 
 
 def use_cloth(step):
@@ -95,7 +96,8 @@ def use_cloth(step):
 
 
 def use_ult(step):
-    grab_screen_and_click("attack")
+    while not grab_screen_and_click("attack"):
+        time.sleep(1)
     time.sleep(4)
     pos = config_data["ult"+str(step[0])]
     click(pos[0], pos[1])
