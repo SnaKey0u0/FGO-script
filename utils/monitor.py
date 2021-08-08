@@ -101,7 +101,7 @@ def wait_until(target_filename):
                 print("enter a new wave")
                 time.sleep(8)
             else:
-                print("end game")
+                print("ending game")
             break
 
 

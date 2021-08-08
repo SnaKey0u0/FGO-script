@@ -1,6 +1,5 @@
 import sys
 import time
-from random import randint
 from utils.monitor import *
 from utils.mouse_clicker import *
 
@@ -62,7 +61,7 @@ def start_playing(info_obj):
                     time.sleep(4)
         wait_until("click_screen")
         ending_game()
-        time.sleep(8)
+        time.sleep(10)
         if first_enter:
             first_enter = False
             grab_screen_and_click("click_screen")
@@ -92,6 +91,7 @@ def use_cloth(step):
         click(pos[0], pos[1])
         time.sleep(1)
         grab_screen_and_click("switch")
+        time.sleep(2)
     time.sleep(4)
 
 
@@ -119,7 +119,6 @@ def ending_game():
     if grab_screen_and_click("no_apply"):
         time.sleep(1)
     grab_screen_and_click("close")
-    time.sleep(3)
 
 def eat_apple():
     if not grab_screen_and_click("silver_apple"):

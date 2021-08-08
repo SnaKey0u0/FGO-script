@@ -6,7 +6,6 @@ script for lazy people (ex: me)
 
 ```
 pip install mss
-pip install pyautogui
 pip install opencv-python
 ```
 
