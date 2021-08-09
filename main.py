@@ -30,6 +30,9 @@ def load_and_set():
 
 
 def gogo():
+    # 匯入設定檔
+    load_and_set()
+    
     # 禁用按鈕
     btn_gogo.config(state=tk.DISABLED)
     btn_testshot.config(state=tk.DISABLED)
@@ -37,6 +40,8 @@ def gogo():
 
 
 def testshot():
+    # 匯入設定檔
+    load_and_set()
     with mss() as sct:
         sct.shot(mon=config_data["screen_num"], output='myScreen.png')
 
@@ -100,9 +105,6 @@ def exit():
 
 
 if __name__ == '__main__':
-
-    # 匯入設定檔
-    load_and_set()
 
     # init
     window = tk.Tk()
