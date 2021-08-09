@@ -31,6 +31,7 @@ def click_match(rectangles):
         print("no match")
         return False
 
+
 def grab_screen():
     # The simplest use, save a screen shot of the 1st monitor
     with mss() as sct:
@@ -38,7 +39,7 @@ def grab_screen():
         sct_img = np.array(sct.grab(sct.monitors[config_data["screen_num"]]))
     # mss.tools.to_png(sct_img.rgb, sct_img.size, output='imgs/myScreen.png')
     # match_img('imgs/myScreen.png')
-    return cv2.cvtColor(sct_img,cv2.COLOR_BGRA2BGR)
+    return cv2.cvtColor(sct_img, cv2.COLOR_BGRA2BGR)
 
 
 def match_img(myScreen, target_filename):
@@ -92,48 +93,52 @@ def wait_until(target_filename):
             print("opps! something went wrong, script stop!")
             sys.exit()
         time.sleep(0.3)
-        print("waiting")
+        print("waiting for", target_filename)
         myScreen = grab_screen()
         rectangles = match_img(myScreen, target_filename)
         if len(rectangles) > 0:
-            if target_filename=="wave":
+            if target_filename == "wave":
                 print("enter a new wave")
                 time.sleep(8)
             else:
-                print("end game")
+                print("ending game")
             break
 
 
 def switch_server(front, back):
     myScreen = grab_screen()
+    myScreen = cv2.cvtColor(myScreen, cv2.COLOR_BGR2GRAY)
     img = myScreen[375:650, 95:1780]
     img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
-    oring = img
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    img = cv2.medianBlur(img, 15)
-    img = cv2.threshold(img, 40, 255, cv2.THRESH_BINARY)[1]
+    # oring = img
+    # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    img = cv2.medianBlur(img, 5)
+    img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 999, 2)
     # img = cv2.Canny(img, 400, 800)
     kernel = np.ones((5, 5), np.uint8)
     # img = cv2.morphologyEx(img,cv2.MORPH_CLOSE, kernel)
     # img = cv2.morphologyEx(img,cv2.MORPH_OPEN, kernel)
     img = cv2.dilate(img, kernel, iterations=4)
-    img = cv2.erode(img, kernel, iterations=2)
+    img = cv2.erode(img, kernel, iterations=1)
     contours, hierarchy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    print(hierarchy)
     contours = contours[5::-1]
     M = cv2.moments(contours[front-1])
     cX = int(M["m10"] / M["m00"])
     cY = int(M["m01"] / M["m00"])
-    click(cX*2+95,cY*2+375)
+    click(cX*2+95, cY*2+375)
     time.sleep(1)
     M = cv2.moments(contours[back-1])
     cX = int(M["m10"] / M["m00"])
     cY = int(M["m01"] / M["m00"])
-    click(cX*2+95,cY*2+375)
+    click(cX*2+95, cY*2+375)
     time.sleep(1)
+
+    # print(len(contours))
     # for c in contours[5::-1]:
     #     M = cv2.moments(c)
     #     cX = int(M["m10"] / M["m00"])
     #     cY = int(M["m01"] / M["m00"])
     #     cv2.circle(oring, (cX, cY), 15, (0, 255, 255), 2)
     #     cv2.drawContours(oring, [c], -1, (0, 255, 0), 2)
-    # show_img(oring)
+    #     show_img(oring)
