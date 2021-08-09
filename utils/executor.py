@@ -44,18 +44,19 @@ def start_playing(info_obj):
             for step in wave:
                 print("exe ins")
                 # 特殊指令
-                if step[0] == "C":
-                    use_cloth(step[1:])
-                elif step[0] == "A":
-                    use_ult(step[1:])
-                    break
+                if isinstance(step[0], str):
+                    if step[0] == "CLOTH":
+                        use_cloth(step[1:])
+                    elif step[0] == "ATTACK":
+                        use_ult(step[1:])
+                        break
                 else:
-                    pos = config_data["skill"+step[0]+step[1]]
+                    pos = config_data["skill"+str(step[0])+str(step[1])]
                     click(pos[0], pos[1])
                     time.sleep(1)
                     # 指定技
                     if (len(step) == 3):
-                        pos = config_data["select"+step[2]]
+                        pos = config_data["select"+str(step[2])]
                         click(pos[0], pos[1])
                     time.sleep(4)
         wait_until("click_screen")
@@ -72,21 +73,21 @@ def use_cloth(step):
     pos = config_data["cloth"]
     click(pos[0], pos[1])
     time.sleep(1)
-    pos = config_data["master-skill"+step[0]]
+    pos = config_data["master-skill"+str(step[0])]
     click(pos[0], pos[1])
     time.sleep(1)
     # 指定技能
     if len(step) == 2:
-        pos = config_data["select"+step[1]]
+        pos = config_data["select"+str(step[1])]
         click(pos[0], pos[1])
 
     # 換人
     elif len(step) == 3:
         # switch_server(step[1], step[2])
-        pos = config_data["switch_pick"+step[1]]
+        pos = config_data["switch_pick"+str(step[1])]
         click(pos[0], pos[1])
         time.sleep(1)
-        pos = config_data["switch_pick"+step[2]]
+        pos = config_data["switch_pick"+str(step[2])]
         click(pos[0], pos[1])
         time.sleep(1)
         grab_screen_and_click("switch")
@@ -98,7 +99,7 @@ def use_ult(step):
     while not grab_screen_and_click("attack"):
         time.sleep(1)
     time.sleep(4)
-    pos = config_data["ult"+step[0]]
+    pos = config_data["ult"+str(step[0])]
     click(pos[0], pos[1])
     time.sleep(1)
     pos = config_data["card1"]
@@ -118,6 +119,7 @@ def ending_game():
     if grab_screen_and_click("no_apply"):
         time.sleep(1)
     grab_screen_and_click("close")
+
 
 def eat_apple():
     if not grab_screen_and_click("silver_apple"):
