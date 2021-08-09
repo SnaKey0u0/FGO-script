@@ -25,15 +25,20 @@ ATTACK指令只能放每個wave的最後
 可指定色卡
 吃銅蘋果
 自動開箱
+自動友抽
 選取從者下拉
 優化時間間隔
 優化螢幕擷取
-增強例外處理
+增強例外處理(log)
 ```
 
 ## 終極目標
 
 ```
-GUI
-APP
+GUI=>EXE(努力中)
+APP(放棄)
 ```
+
+## 測試版 EXE
+
+[MEGA 下載](https://mega.nz/file/xnIHiY4b#g2weTU8gnfe3XBprvtaYYrnvYtWrEWN3mnuKR0vPfpQ)
