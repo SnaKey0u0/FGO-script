@@ -9,12 +9,13 @@ pip install mss
 pip install opencv-python
 ```
 
-## exe Usage
+## Exe Usage
 
 ```
 1.擷取螢幕可至positions_config.json調整screen_num參數，並進行測試(在根目錄生成myScreen.png)
-2.將模擬器放至最大(非全螢幕)，畫面停留在入關前，點選執行(該螢幕縮放需調整成100%)
-3.loop留白視為999次
+2.各別腳本可至scripts資料夾建立
+3.將模擬器放至最大(非全螢幕)，畫面停留在入關前，點選執行(該螢幕縮放需調整成100%)
+4.loop留白視為999次
 
 # 指令說明
 # EX: [1, 2]            => 從者1施放2技(不用選擇目標)
@@ -30,6 +31,7 @@ pip install opencv-python
 ## Todo
 
 ```
+解放螢幕
 可選擇職階
 可指定色卡
 吃銅蘋果
