@@ -1,12 +1,13 @@
 import sys
 import json
-import tkinter as tk
-from threading import Thread
-from tkinter import filedialog as fd
+import tkinter.filedialog as fd
+import tkinter.messagebox as msg
 from mss import mss
-from utils.executor import start_playing, set_config as set_executor
+from threading import Thread
 from utils.monitor import set_config as set_monitor
 from utils.mouse_clicker import set_config as set_mouse_clicker
+from utils.executor import start_playing, set_config as set_executor
+from tkinter import NORMAL, DISABLED, PhotoImage, Label, Entry, StringVar, OptionMenu, Button, Tk
 
 config_data = {}
 
@@ -14,10 +15,17 @@ config_data = {}
 class ExecuteTaskHandler(Thread):
     def run(self):
         info_obj = create_info()
-        start_playing(info_obj)
+        if info_obj != None:
+            start_playing(info_obj)
+        else:
+            msg.showinfo("script error", "請選擇腳本")
         # 啟用按鈕
-        btn_gogo.config(state=tk.NORMAL)
-        btn_testshot.config(state=tk.NORMAL)
+        btn_gogo.config(state=NORMAL)
+        btn_testshot.config(state=NORMAL)
+
+    def stop(self):
+        if self.is_alive():
+            self.join()
 
 
 def load_and_set():
@@ -32,10 +40,9 @@ def load_and_set():
 def gogo():
     # 匯入設定檔
     load_and_set()
-    
     # 禁用按鈕
-    btn_gogo.config(state=tk.DISABLED)
-    btn_testshot.config(state=tk.DISABLED)
+    btn_gogo.config(state=DISABLED)
+    btn_testshot.config(state=DISABLED)
     ExecuteTaskHandler(daemon=True).start()
 
 
@@ -53,19 +60,6 @@ def num_validate(P):
         return False
 
 
-# def select_img():
-#     filetypes = (
-#         ('img files', '*.png'),
-#         ('All files', '*.*')
-#     )
-#     filename = fd.askopenfilename(
-#         title='Open a file',
-#         initialdir='imgs',
-#         filetypes=filetypes)
-#     if filename != '':
-#         btn_server.config(text=filename.split('/')[-1][:-4])
-
-
 def select_script():
     filetypes = (
         ('json files', '*.json'),
@@ -80,24 +74,17 @@ def select_script():
 
 
 def create_info():
-    with open("scripts/"+btn_script.cget("text"), "r", encoding="utf-8") as f:
-        info_obj = json.load(f)
-    # final = list()
-    # for d in data:
-    #     foo = list()
-    #     for i in d.split(','):
-    #         fooo = list()
-    #         for e in i:
-    #             fooo.append(e)
-    #         foo.append(fooo)
-    #     final.append(foo)
-    # info_obj = {"loop": int(entry_loop.get()),
-    #             "team": opt_team.cget("text"),
-    #             "class": opt_use_class.cget("text"),
-    #             "server": btn_server.cget("text"),
-    #             "instructions": final}
-    info_obj["loop"] = int(entry_loop.get())
-    return info_obj
+    try:
+        with open("scripts/"+btn_script.cget("text"), "r", encoding="utf-8") as f:
+            info_obj = json.load(f)
+        if entry_loop.get() == "":
+            info_obj["loop"] = 999
+        else:
+            info_obj["loop"] = int(entry_loop.get())
+        info_obj["apples"] = opt_apples.cget("text")
+        return info_obj
+    except:
+        return None
 
 
 def exit():
@@ -107,70 +94,76 @@ def exit():
 if __name__ == '__main__':
 
     # init
-    window = tk.Tk()
+    window = Tk()
+    window.resizable(width=False, height=False)
     vcmd = (window.register(num_validate), '%P')
-    # use_team = ["不變更", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    apples = ["銀蘋果", "金蘋果", "彩色蘋果"]
     # use_class = ["不變更", "全", "劍", "弓", "槍", "騎", "術", "殺", "狂", "外", "混"]
     # card_color = ["不在乎", "B", "A", "Q"]
 
     # 設定視窗標題、大小和背景顏色
     window.title('FGO-script')
-    # window.geometry('640x360')
-    window.configure(background='blue')
+    window.iconbitmap('fgo.ico')
+    # window.geometry('320x180')
+    # window.configure(background='blue')
+    bg = PhotoImage(file="wife.png")
+    # bg = bg.subsample(4) #mechanically, here it is adjusted to 32 instead of 320
+    bg_label = Label(window, image=bg)
+    bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
     # 標題文字
-    tk.Label(window, text='神遊快樂腳本', bg='white', font=('TkDefaultFont', 16)).grid(column=0, row=0, padx=0, pady=5)
+    Label(window, text='FGO宇宙神遊', bg='white', font=('TkDefaultFont', 16)).grid(column=0, row=0, padx=0, pady=5)
 
     # input
-    tk.Label(window, text='Loop次數', bg='white', font=('TkDefaultFont', 12)).grid(column=0, row=1, padx=0, pady=5)
-    entry_loop = tk.Entry(window, validate='key', validatecommand=vcmd)
+    Label(window, text='Loop次數', bg='white', font=('TkDefaultFont', 12)).grid(column=0, row=1, padx=0, pady=5)
+    entry_loop = Entry(window, validate='key', validatecommand=vcmd, width=16)
     entry_loop.grid(column=1, row=1, padx=0, pady=5)
 
-    # # 下拉選單
-    # tk.Label(window, text='使用隊伍', bg='white', font=('TkDefaultFont', 12)).grid(column=0, row=2, padx=0, pady=5)
-    # variable = tk.StringVar(window)
-    # variable.set(use_team[0])
-    # opt_team = tk.OptionMenu(window, variable, *use_team)
-    # opt_team.grid(column=1, row=2, padx=0, pady=5)
+    # 下拉選單
+    Label(window, text='體力回復', bg='white', font=('TkDefaultFont', 12)).grid(column=0, row=2, padx=0, pady=5)
+    variable = StringVar(window)
+    variable.set(apples[0])
+    opt_apples = OptionMenu(window, variable, *apples)
+    opt_apples.grid(column=1, row=2, padx=0, pady=5)
 
     # # 下拉選單
-    # tk.Label(window, text='使用職階', bg='white', font=('TkDefaultFont', 12)).grid(column=0, row=3, padx=0, pady=5)
-    # variable = tk.StringVar(window)
+    #  Label(window, text='使用職階', bg='white', font=('TkDefaultFont', 12)).grid(column=0, row=3, padx=0, pady=5)
+    # variable =  StringVar(window)
     # variable.set(use_class[0])
-    # opt_use_class = tk.OptionMenu(window, variable, *use_class)
+    # opt_use_class =  OptionMenu(window, variable, *use_class)
     # opt_use_class.grid(column=1, row=3, padx=0, pady=5)
 
     # # file
-    # tk.Label(window, text='使用從者', bg='white', font=('TkDefaultFont', 12)).grid(column=0, row=4, padx=0, pady=5)
-    # btn_server = tk.Button(window, text='選擇檔案', command=select_img)
+    #  Label(window, text='使用從者', bg='white', font=('TkDefaultFont', 12)).grid(column=0, row=4, padx=0, pady=5)
+    # btn_server =  Button(window, text='選擇檔案', command=select_img)
     # btn_server.grid(column=1, row=4, padx=0, pady=5)
 
     # file
-    tk.Label(window, text='使用腳本', bg='white', font=('TkDefaultFont', 12)).grid(column=0, row=2, padx=0, pady=5)
-    btn_script = tk.Button(window, text='選擇檔案', command=select_script)
-    btn_script.grid(column=1, row=2, padx=0, pady=5)
+    Label(window, text='使用腳本', bg='white', font=('TkDefaultFont', 12)).grid(column=0, row=3, padx=0, pady=5)
+    btn_script = Button(window, text='選擇檔案', command=select_script)
+    btn_script.grid(column=1, row=3, padx=0, pady=5)
 
     # # 下拉選單
-    # tk.Label(window, text='優先卡色', bg='white', font=('TkDefaultFont', 12)).grid(column=0, row=6, padx=0, pady=5)
-    # variable = tk.StringVar(window)
+    #  Label(window, text='優先卡色', bg='white', font=('TkDefaultFont', 12)).grid(column=0, row=6, padx=0, pady=5)
+    # variable =  StringVar(window)
     # variable.set(card_color[0])
-    # opt_prefer_color = tk.OptionMenu(window, variable, *card_color)
+    # opt_prefer_color =  OptionMenu(window, variable, *card_color)
     # opt_prefer_color.grid(column=1, row=6, padx=0, pady=5)
 
     # # 單選
-    # tk.Label(window, text='優先弱點', bg='white', font=('TkDefaultFont', 12)).grid(column=0, row=7)
-    # radioValue = tk.IntVar()
-    # radioYes = tk.Radiobutton(window, text='是', variable=radioValue, value=1)
+    #  Label(window, text='優先弱點', bg='white', font=('TkDefaultFont', 12)).grid(column=0, row=7)
+    # radioValue =  IntVar()
+    # radioYes =  Radiobutton(window, text='是', variable=radioValue, value=1)
     # radioYes.grid(column=1, row=7, padx=0, pady=5)
-    # radioNo = tk.Radiobutton(window, text='否', variable=radioValue, value=0)
+    # radioNo =  Radiobutton(window, text='否', variable=radioValue, value=0)
     # radioNo.grid(column=2, row=7, padx=0, pady=5)
 
     # 按鈕
-    btn_testshot = tk.Button(window, text='測試截圖', command=testshot)
+    btn_testshot = Button(window, text='測試截圖', command=testshot)
     btn_testshot.grid(column=0, row=4, padx=0, pady=5)
-    btn_gogo = tk.Button(window, text='開始執行', command=gogo)
+    btn_gogo = Button(window, text='開始執行', command=gogo)
     btn_gogo.grid(column=1, row=4, padx=0, pady=5)
-    btn_exit = tk.Button(window, text='緊急逃生', command=exit)
+    btn_exit = Button(window, text='緊急逃生', command=exit)
     btn_exit.grid(column=2, row=4, padx=0, pady=5)
 
     # 運行主程式

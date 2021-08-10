@@ -1,4 +1,3 @@
-import sys
 import cv2
 import time
 import numpy as np
@@ -25,7 +24,7 @@ def click_match(rectangles):
     # 點擊第一個位置
     if(len(rectangles) > 0):
         (x, y, w, h) = rectangles[0]
-        click(x*(1/rate)+w//2, y*(1/rate)+h//2)
+        click(x*(1/rate)+w, y*(1/rate)+h)
         return True
     else:
         print("no match")
@@ -44,7 +43,10 @@ def grab_screen():
 
 def match_img(myScreen, target_filename):
     img = cv2.resize(myScreen, (0, 0), fy=rate, fx=rate)
-    target_img = cv2.imread('imgs/'+target_filename+'.png')
+    # 解決中文路徑問題
+    target_img = cv2.imdecode(np.fromfile('imgs/'+target_filename+'.png', dtype=np.uint8), -1)
+    target_img = cv2.cvtColor(target_img, cv2.COLOR_BGRA2BGR)
+    # target_img = cv2.imread('imgs/'+target_filename+'.png')
     target_img = cv2.resize(target_img, (0, 0), fy=rate, fx=rate)
 
     # 匹配
@@ -91,7 +93,7 @@ def wait_until(target_filename):
         now = time.time()
         if (now - start) > 30:
             print("opps! something went wrong, script stop!")
-            sys.exit()
+            return False
         time.sleep(0.3)
         print("waiting for", target_filename)
         myScreen = grab_screen()
@@ -102,10 +104,11 @@ def wait_until(target_filename):
                 time.sleep(8)
             else:
                 print("ending game")
-            break
+            return True
 
 
 def switch_server(front, back):
+    # 目前沒用
     myScreen = grab_screen()
     myScreen = cv2.cvtColor(myScreen, cv2.COLOR_BGR2GRAY)
     img = myScreen[375:650, 95:1780]
@@ -142,3 +145,33 @@ def switch_server(front, back):
     #     cv2.circle(oring, (cX, cY), 15, (0, 255, 255), 2)
     #     cv2.drawContours(oring, [c], -1, (0, 255, 0), 2)
     #     show_img(oring)
+
+
+def select_team(team_num):
+    myScreen = grab_screen()
+    myScreen = cv2.cvtColor(myScreen, cv2.COLOR_BGR2GRAY)
+    img = myScreen[85:115, 765:1120]
+    img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
+    img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+    img = cv2.medianBlur(img, 5)
+    img = 255-img
+    kernel = np.ones((3, 3), np.uint8)
+    img = cv2.dilate(img, kernel, iterations=2)
+    img = cv2.erode(img, kernel, iterations=2)
+    contours, hierarchy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    foo = list()
+    for c in contours:
+        M = cv2.moments(c)
+        cX = int(M["m10"] / M["m00"])
+        cY = int(M["m01"] / M["m00"])
+        # print(cX)
+        foo.append((cX, cY))
+    foo.sort()
+    click(foo[team_num][0]*2+765, foo[team_num][1]*2+85)
+    time.sleep(1)
+    click(foo[team_num-1][0]*2+765, foo[team_num-1][1]*2+85)
+
+
+# if __name__ == "__main__":
+#     for i in range(1, 11):
+#         select_team(i)

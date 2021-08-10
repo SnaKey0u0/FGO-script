@@ -1,4 +1,3 @@
-import sys
 import time
 from utils.monitor import *
 from utils.mouse_clicker import *
@@ -23,9 +22,10 @@ def start_playing(info_obj):
             first_enter = True
             if not grab_screen_and_click("select_episode2"):
                 print("opps! something went wrong, script stop!")
-                sys.exit()
+                return
         time.sleep(1)
-        eat_apple()
+        if not eat_apple(info_obj["apples"]):
+            return
         first_refresh = True
         while not grab_screen_and_click(info_obj["server"]):
             if first_refresh:
@@ -36,11 +36,14 @@ def start_playing(info_obj):
             time.sleep(1)
             grab_screen_and_click("yes")
             time.sleep(4)
+        time.sleep(2)
+        select_team(info_obj["team"])
         # 進關前倒數
-        time.sleep(4)
+        time.sleep(3)
         grab_screen_and_click("start_episode")
         for wave in info_obj["instructions"]:
-            wait_until("wave")
+            if not wait_until("wave"):
+                return
             for step in wave:
                 print("exe ins")
                 # 特殊指令
@@ -59,7 +62,8 @@ def start_playing(info_obj):
                         pos = config_data["select"+str(step[2])]
                         click(pos[0], pos[1])
                     time.sleep(4)
-        wait_until("click_screen")
+        if not wait_until("click_screen"):
+            return
         ending_game()
         time.sleep(10)
         if first_enter:
@@ -121,16 +125,15 @@ def ending_game():
     grab_screen_and_click("close")
 
 
-def eat_apple():
-    if not grab_screen_and_click("silver_apple"):
-        if not grab_screen_and_click("gold_apple"):
-            if not grab_screen_and_click("confirm"):
-                print("already in episode")
-                time.sleep(1)
-                return False
-            else:
-                print("no apple left")
-                sys.exit()
+def eat_apple(apples):
+    if not grab_screen_and_click(apples):
+        if not grab_screen_and_click("confirm"):
+            print("already in episode")
+            time.sleep(1)
+            return True
+        else:
+            print("no apple left")
+            return False
     time.sleep(1)
     grab_screen_and_click("confirm")
     time.sleep(4)
