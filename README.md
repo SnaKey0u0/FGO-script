@@ -18,12 +18,12 @@ pip install opencv-python
 4.loop留白視為999次
 
 # 指令說明
-# EX: [1, 2]            => 從者1施放2技(不用選擇目標)
-# EX: [1, 2, 3]         => 從者1施放2技給從者3
-# EX: ["CLOTH", 1]      => 使用衣服技能1(不用選擇目標)
-# EX: ["CLOTH", 1, 2]   => 衣服技能1施放給從者2
-# EX: ["CLOTH", 3, 2, 6]=> 換人禮裝專用，從者2換從者6
-# EX: ["ATTACK", 1]     => 開始戰鬥，從者1施放寶具(僅能1人施放)
+# EX: [1, 2]             => 從者1施放2技(不用選擇目標)
+# EX: [1, 2, 3]          => 從者1施放2技給從者3
+# EX: ["CLOTH", 1]       => 使用衣服技能1(不用選擇目標)
+# EX: ["CLOTH", 1, 2]    => 衣服技能1施放給從者2
+# EX: ["CLOTH", 3, 2, 6] => 換人禮裝專用，從者2換從者6
+# EX: ["ATTACK", 1, 2]   => 開始戰鬥，從者1、從者2施放寶具
 
 最後，背景可透過wife.png修改，大小為320x180
 ```
@@ -32,8 +32,7 @@ pip install opencv-python
 
 ```
 解放螢幕
-可選擇職階
-可指定色卡
+選擇職階
 吃銅蘋果
 自動開箱
 自動友抽
@@ -52,5 +51,5 @@ APP(放棄)
 
 ## 測試版 EXE
 
-[MEGA 下載](https://mega.nz/file/xnIHiY4b#g2weTU8gnfe3XBprvtaYYrnvYtWrEWN3mnuKR0vPfpQ)
+[MEGA 下載](https://mega.nz/file/siYkDZYB#OI7L9xAykdNVn7RwsycvxZ5M9Nz8szi75NuNDtRySxQ)
 [ico&bgImg](https://twitter.com/erichpcsc/status/1201033067135033344)
