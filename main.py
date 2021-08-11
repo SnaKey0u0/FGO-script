@@ -160,11 +160,11 @@ if __name__ == '__main__':
 
     # 按鈕
     btn_testshot = Button(window, text='測試截圖', command=testshot)
-    btn_testshot.grid(column=0, row=4, padx=0, pady=5)
+    btn_testshot.grid(column=0, row=4, padx=0, pady=4)
     btn_gogo = Button(window, text='開始執行', command=gogo)
-    btn_gogo.grid(column=1, row=4, padx=0, pady=5)
+    btn_gogo.grid(column=1, row=4, padx=0, pady=4)
     btn_exit = Button(window, text='緊急逃生', command=exit)
-    btn_exit.grid(column=2, row=4, padx=0, pady=5)
+    btn_exit.grid(column=2, row=4, padx=0, pady=4)
 
     # 運行主程式
     window.mainloop()

@@ -6,7 +6,6 @@ from utils.mouse_clicker import *
 
 rate = 0.5
 config_data = {}
-# monitor = {'left': 1920, 'top': 0, 'width': 1920, 'height': 1080}
 
 
 def set_config(config):
@@ -172,6 +171,33 @@ def select_team(team_num):
     click(foo[team_num-1][0]*2+765, foo[team_num-1][1]*2+85)
 
 
-# if __name__ == "__main__":
-#     for i in range(1, 11):
-#         select_team(i)
+def select_card(prefer_card, prefer_weak):
+    myScreen = grab_screen()
+    myScreen = myScreen[525:, :, :]
+    rectangles_card = match_img(myScreen, prefer_card)
+    pos_score = [0, 0, 0, 0, 0]
+    for (x, y, w, h) in rectangles_card:
+        closest = 999
+        for i in range(0, 5):
+            pos = config_data["card"+str(i+1)]
+            if closest > abs(x*2 - pos[0]):
+                closest = abs(x*2 - pos[0])
+                index = i
+        pos_score[index] += 1
+    if prefer_weak:
+        rectangles_weak = match_img(myScreen, "weak")
+        for (x, y, w, h) in rectangles_weak:
+            closest = 999
+            for i in range(0, 5):
+                pos = config_data["card"+str(i+1)]
+                if closest > abs(x*2 - pos[0]):
+                    closest = abs(x*2 - pos[0])
+                    index = i
+            pos_score[index] += 2
+    pos_score = sorted(range(len(pos_score)), key=lambda k: pos_score[k])
+    pos_score.reverse()
+    for i in range(3):
+        print("card", pos_score[i]+1)
+        pos = config_data["card"+str(pos_score[i]+1)]
+        click(pos[0], pos[1])
+        time.sleep(1)

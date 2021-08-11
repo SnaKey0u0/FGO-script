@@ -53,6 +53,7 @@ def start_playing(info_obj):
                             use_cloth(step[1:])
                         elif step[0] == "ATTACK":
                             use_ult(step[1:])
+                            select_card(info_obj["prefer_card"], info_obj["prefer_weak"])
                             break
                     else:
                         pos = config_data["skill"+str(step[0])+str(step[1])]
@@ -74,6 +75,7 @@ def start_playing(info_obj):
         print("finished")
     except:
         return
+
 
 def use_cloth(step):
     pos = config_data["cloth"]
@@ -105,14 +107,16 @@ def use_ult(step):
     while not grab_screen_and_click("attack"):
         time.sleep(1)
     time.sleep(4)
-    pos = config_data["ult"+str(step[0])]
-    click(pos[0], pos[1])
-    time.sleep(1)
-    pos = config_data["card1"]
-    click(pos[0], pos[1])
-    time.sleep(1)
-    pos = config_data["card2"]
-    click(pos[0], pos[1])
+    for ult in step:
+        print("use ult "+str(ult))
+        pos = config_data["ult"+str(ult)]
+        click(pos[0], pos[1])
+        time.sleep(1)
+    # pos = config_data["card1"]
+    # click(pos[0], pos[1])
+    # time.sleep(1)
+    # pos = config_data["card2"]
+    # click(pos[0], pos[1])
 
 
 def ending_game():
