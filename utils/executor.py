@@ -1,4 +1,5 @@
 import time
+from utils.logger import *
 from utils.monitor import *
 from utils.mouse_clicker import *
 
@@ -17,12 +18,13 @@ def print_config():
 def start_playing(info_obj):
     try:
         for i in range(info_obj["loop"]):
-            print("loop: "+str(i+1))
+            info("loop第 "+str(i+1)+" 次")
             first_enter = False
             if not grab_screen_and_click("select_episode1"):
                 first_enter = True
                 if not grab_screen_and_click("select_episode2"):
-                    print("opps! something went wrong, script stop!")
+                    error("opps! something went wrong, script stop!")
+                    error("找不到關卡進入點")
                     return
             time.sleep(1)
             if not eat_apple(info_obj["apples"]):
@@ -46,7 +48,7 @@ def start_playing(info_obj):
                 if not wait_until("wave"):
                     return
                 for step in wave:
-                    print("exe ins")
+                    info("技能施放")
                     # 特殊指令
                     if isinstance(step[0], str):
                         if step[0] == "CLOTH":
@@ -67,12 +69,14 @@ def start_playing(info_obj):
             if not wait_until("click_screen"):
                 return
             ending_game()
+            info("等待結束動畫")
             time.sleep(10)
             if first_enter:
                 first_enter = False
+                info("第一次進入關卡")
                 grab_screen_and_click("click_screen")
                 time.sleep(4)
-        print("finished")
+        info("腳本結束")
     except:
         return
 
@@ -108,7 +112,7 @@ def use_ult(step):
         time.sleep(1)
     time.sleep(4)
     for ult in step:
-        print("use ult "+str(ult))
+        info("使用寶具 "+str(ult))
         pos = config_data["ult"+str(ult)]
         click(pos[0], pos[1])
         time.sleep(1)
@@ -134,11 +138,11 @@ def ending_game():
 def eat_apple(apples):
     if not grab_screen_and_click(apples):
         if not grab_screen_and_click("confirm"):
-            print("already in episode")
+            info("已進入關卡")
             time.sleep(1)
             return True
         else:
-            print("no apple left")
+            error("沒有蘋果剩下，結束腳本")
             return False
     time.sleep(1)
     grab_screen_and_click("confirm")

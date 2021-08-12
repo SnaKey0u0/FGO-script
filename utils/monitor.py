@@ -2,6 +2,7 @@ import cv2
 import time
 import numpy as np
 from mss import mss
+from utils.logger import *
 from utils.mouse_clicker import *
 
 rate = 0.5
@@ -26,7 +27,7 @@ def click_match(rectangles):
         click(x*(1/rate)+w, y*(1/rate)+h)
         return True
     else:
-        print("no match")
+        warning("no match")
         return False
 
 
@@ -81,28 +82,30 @@ def match_img(myScreen, target_filename):
 
 def grab_screen_and_click(target_filename):
     myScreen = grab_screen()
-    print("matching "+target_filename)
+    info("matching "+target_filename)
     rectangles = match_img(myScreen, target_filename)
     return click_match(rectangles)
 
 
 def wait_until(target_filename):
     start = time.time()
+    info("waiting for " + target_filename)
     while True:
         now = time.time()
         if (now - start) > 30:
-            print("opps! something went wrong, script stop!")
+            error("opps! something went wrong, script stop!")
+            error("過場中斷")
             return False
         time.sleep(0.3)
-        print("waiting for", target_filename)
+        # print("waiting for "+ target_filename)
         myScreen = grab_screen()
         rectangles = match_img(myScreen, target_filename)
         if len(rectangles) > 0:
             if target_filename == "wave":
-                print("enter a new wave")
+                info("enter a new wave")
                 time.sleep(8)
             else:
-                print("ending game")
+                info("ending game")
             return True
 
 
@@ -197,7 +200,7 @@ def select_card(prefer_card, prefer_weak):
     pos_score = sorted(range(len(pos_score)), key=lambda k: pos_score[k])
     pos_score.reverse()
     for i in range(3):
-        print("card", pos_score[i]+1)
+        info("card " + str(pos_score[i]+1))
         pos = config_data["card"+str(pos_score[i]+1)]
         click(pos[0], pos[1])
         time.sleep(1)

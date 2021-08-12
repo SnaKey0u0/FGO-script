@@ -1,16 +1,22 @@
 import win32gui
 import win32api
 import win32con
+from utils.logger import *
 # import win32ui
 # from ctypes import windll
 
 config_data = {}
-hWnd = win32gui.FindWindow(None, "夜神模擬器")
+hWnd = None
 
 
 def set_config(config):
     global config_data
     config_data = config
+    try:
+        global hWnd
+        hWnd = win32gui.FindWindow(None, "夜神模擬器")
+    except Exception as e:
+        error(e)
 
 
 # def click(x, y, d=0.1):
