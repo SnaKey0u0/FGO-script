@@ -6,7 +6,7 @@ from mss import mss
 from threading import Thread
 from utils.monitor import set_config as set_monitor
 from utils.mouse_clicker import set_config as set_mouse_clicker
-from utils.executor import start_playing, set_config as set_executor
+from utils.executor import start_playing, summon, set_config as set_executor
 from tkinter import NORMAL, DISABLED, PhotoImage, Label, Entry, StringVar, OptionMenu, Button, Tk
 
 config_data = {}
@@ -21,11 +21,21 @@ class ExecuteTaskHandler(Thread):
             msg.showinfo("script error", "請選擇腳本")
         # 啟用按鈕
         btn_gogo.config(state=NORMAL)
+        btn_summon.config(state=NORMAL)
         btn_testshot.config(state=NORMAL)
 
-    def stop(self):
-        if self.is_alive():
-            self.join()
+
+class SummonTaskHandler(Thread):
+    def run(self):
+        if entry_loop.get() == "":
+            n = 999
+        else:
+            n = int(entry_loop.get())
+        summon(n)
+        # 啟用按鈕
+        btn_gogo.config(state=NORMAL)
+        btn_summon.config(state=NORMAL)
+        btn_testshot.config(state=NORMAL)
 
 
 def load_and_set():
@@ -42,6 +52,7 @@ def gogo():
     load_and_set()
     # 禁用按鈕
     btn_gogo.config(state=DISABLED)
+    btn_summon.config(state=DISABLED)
     btn_testshot.config(state=DISABLED)
     ExecuteTaskHandler(daemon=True).start()
 
@@ -51,6 +62,14 @@ def testshot():
     load_and_set()
     with mss() as sct:
         sct.shot(mon=config_data["screen_num"], output='myScreen.png')
+
+
+def friend_summon():
+    load_and_set()
+    btn_gogo.config(state=DISABLED)
+    btn_summon.config(state=DISABLED)
+    btn_testshot.config(state=DISABLED)
+    SummonTaskHandler(daemon=True).start()
 
 
 def num_validate(P):
@@ -165,6 +184,10 @@ if __name__ == '__main__':
     btn_gogo.grid(column=1, row=4, padx=0, pady=4)
     btn_exit = Button(window, text='緊急逃生', command=exit)
     btn_exit.grid(column=2, row=4, padx=0, pady=4)
+    btn_summon = Button(window, text='友抽', command=friend_summon)
+    btn_summon.grid(column=1, row=0, padx=0, pady=5)
+    btn_box = Button(window, text='自動開箱')
+    btn_box.grid(column=2, row=0, padx=0, pady=5)
 
     # 運行主程式
     window.mainloop()

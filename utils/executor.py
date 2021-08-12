@@ -148,3 +148,21 @@ def eat_apple(apples):
     grab_screen_and_click("confirm")
     time.sleep(4)
     return True
+
+
+def summon(n):
+    if not grab_screen_and_click("free_summon"):
+        if not grab_screen_and_click("summon"):
+            error("請至友抽畫面")
+            return
+    info("友抽開始")
+    time.sleep(1)
+    for i in range(n):
+        grab_screen_and_click("confirm")
+        time.sleep(5)
+        click(1800, 87)
+        time.sleep(1)
+        grab_screen_and_click("cont_summon")
+        time.sleep(1)
+    info("友抽結束")
+    grab_screen_and_click("close")

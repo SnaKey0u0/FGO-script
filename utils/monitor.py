@@ -56,12 +56,16 @@ def match_img(myScreen, target_filename):
     w = target_img.shape[1]
     h = target_img.shape[0]
     # min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-    # cv2.rectangle(img, max_loc, (max_loc[0]+w, max_loc[1]+h), (0, 225, 225), 2)
-    # print(max_val)
+    # info("matched max value"+str(max_val))
+    # info("matched max value"+str(max_loc))
     # show_img(img)
 
     # 過濾區域
-    threshold = .60
+    threshold = .70
+    if (target_filename == "confirm" or target_filename == "close"):
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+        if max_val > threshold:
+            return [(max_loc[0], max_loc[1], w, h)]
     yloc, xloc = np.where(result >= threshold)
 
     # 準備合併相似區域
@@ -197,6 +201,15 @@ def select_card(prefer_card, prefer_weak):
                     closest = abs(x*2 - pos[0])
                     index = i
             pos_score[index] += 2
+        rectangles_resist = match_img(myScreen, "resist")
+        for (x, y, w, h) in rectangles_resist:
+            closest = 999
+            for i in range(0, 5):
+                pos = config_data["card"+str(i+1)]
+                if closest > abs(x*2 - pos[0]):
+                    closest = abs(x*2 - pos[0])
+                    index = i
+            pos_score[index] -= 2
     pos_score = sorted(range(len(pos_score)), key=lambda k: pos_score[k])
     pos_score.reverse()
     for i in range(3):
