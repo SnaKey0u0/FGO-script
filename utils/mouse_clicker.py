@@ -1,20 +1,20 @@
 import win32gui
 import win32api
 import win32con
+import win32ui
 from utils.logger import *
-# import win32ui
 # from ctypes import windll
 
-config_data = {}
-hWnd = None
+# config_data = {}
+hwnd = None
 
 
-def set_config(config):
-    global config_data
-    config_data = config
+def set_config():
+    # global config_data
+    # config_data = config
     try:
-        global hWnd
-        hWnd = win32gui.FindWindow(None, "夜神模擬器")
+        global hwnd
+        hwnd = win32gui.FindWindow(None, "夜神模擬器")
     except Exception as e:
         error(e)
 
@@ -32,38 +32,43 @@ def set_config(config):
 def click(x, y):
     x, y = int(x), int(y)
     lParam = win32api.MAKELONG(x, y)
-    win32gui.PostMessage(hWnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, lParam)
-    win32gui.PostMessage(hWnd, win32con.WM_LBUTTONUP, 0, lParam)
+    win32gui.PostMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, lParam)
+    win32gui.PostMessage(hwnd, win32con.WM_LBUTTONUP, 0, lParam)
 
-# def shotTest():
-#     hwndDC = win32gui.GetWindowDC(hWnd)
-#     mfcDC  = win32ui.CreateDCFromHandle(hwndDC)
-#     saveDC = mfcDC.CreateCompatibleDC()
 
-#     saveBitMap = win32ui.CreateBitmap()
-#     print(saveBitMap)
-#     saveBitMap.CreateCompatibleBitmap(mfcDC)
+def getWinBitStr(width, height):
+    hwindc = win32gui.GetWindowDC(hwnd)
+    srcdc = win32ui.CreateDCFromHandle(hwindc)
+    memdc = srcdc.CreateCompatibleDC()
+    bmp = win32ui.CreateBitmap()
+    bmp.CreateCompatibleBitmap(srcdc, width, height)
+    memdc.SelectObject(bmp)
+    memdc.BitBlt((0, 0), (width, height), srcdc, (0, 0), win32con.SRCCOPY)
+    # bmp.SaveBitmapFile(memdc, "shot.bmp")
 
-#     saveDC.SelectObject(saveBitMap)
-#     result = windll.user32.PrintWindow(hWnd, saveDC.GetSafeHdc(), 0)
+    bmpstr = bmp.GetBitmapBits(True)
+    # convert the raw data into a format opencv can read
+    # img = np.frombuffer(bmpstr, dtype='uint8')
+    # img.shape = (height, width, 4)
+    # # img = np.ascontiguousarray(img)
+    # cv2.imshow("123", img)
+    # cv2.waitKey()
 
-#     bmpinfo = saveBitMap.GetInfo()
-#     bmpstr = saveBitMap.GetBitmapBits(True)
-#     print(bmpstr)
+    # bmpinfo = bmp.GetInfo()
+    # img = Image.frombuffer(
+    #         'RGB',
+    #         (bmpinfo['bmWidth'], bmpinfo['bmHeight']),
+    #         bmpstr, 'raw', 'BGRX', 0, 1)
 
-#     im = Image.frombuffer(
-#         'RGB',
-#         (bmpinfo['bmWidth'], bmpinfo['bmHeight']),
-#         bmpstr, 'raw', 'BGRX', 0, 1)
+    srcdc.DeleteDC()
+    memdc.DeleteDC()
+    win32gui.ReleaseDC(hwnd, hwindc)
+    win32gui.DeleteObject(bmp.GetHandle())
 
-#     win32gui.DeleteObject(saveBitMap.GetHandle())
-#     saveDC.DeleteDC()
-#     mfcDC.DeleteDC()
-#     win32gui.ReleaseDC(hwnd, hwndDC)
+    return bmpstr
 
-# if result == 1:
-#     #PrintWindow Succeeded
-#     im.save("test.png")
 
 # if __name__ == "__main__":
-    # shotTest()
+#     set_config()
+#     # click(960,540)
+#     getWinBitStr(1920, 1080)

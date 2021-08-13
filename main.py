@@ -2,9 +2,8 @@ import sys
 import json
 import tkinter.filedialog as fd
 import tkinter.messagebox as msg
-from mss import mss
 from threading import Thread
-from utils.monitor import set_config as set_monitor
+from utils.monitor import set_config as set_monitor,testshot as ts
 from utils.mouse_clicker import set_config as set_mouse_clicker
 from utils.executor import start_playing, summon, set_config as set_executor
 from tkinter import NORMAL, DISABLED, PhotoImage, Label, Entry, StringVar, OptionMenu, Button, Tk
@@ -44,7 +43,7 @@ def load_and_set():
         config_data = json.load(config_file)
     set_executor(config_data)
     set_monitor(config_data)
-    set_mouse_clicker(config_data)
+    set_mouse_clicker()
 
 
 def gogo():
@@ -60,8 +59,7 @@ def gogo():
 def testshot():
     # 匯入設定檔
     load_and_set()
-    with mss() as sct:
-        sct.shot(mon=config_data["screen_num"], output='myScreen.png')
+    ts()
 
 
 def friend_summon():

@@ -1,7 +1,6 @@
 import cv2
 import time
 import numpy as np
-from mss import mss
 from utils.logger import *
 from utils.mouse_clicker import *
 
@@ -19,6 +18,14 @@ def show_img(img):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
+def testshot():
+    bmpstr = getWinBitStr(1920,1080)
+    img = np.frombuffer(bmpstr, dtype='uint8')
+    img.shape = (1080, 1920, 4)
+    img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
+    cv2.imwrite("myScreen.png", img)
+
+
 
 def click_match(rectangles):
     # 點擊第一個位置
@@ -32,13 +39,19 @@ def click_match(rectangles):
 
 
 def grab_screen():
+    bmpstr = getWinBitStr(1920,1080)
+    # convert the raw data into a format opencv can read
+    img = np.frombuffer(bmpstr, dtype='uint8')
+    img.shape = (1080, 1920, 4)
+    # img = np.ascontiguousarray(img)
+
+
+
     # The simplest use, save a screen shot of the 1st monitor
-    with mss() as sct:
-        # myScreen = sct.shot(mon=config_data["screen_num"], output='imgs/myScreen.png')
-        sct_img = np.array(sct.grab(sct.monitors[config_data["screen_num"]]))
-    # mss.tools.to_png(sct_img.rgb, sct_img.size, output='imgs/myScreen.png')
-    # match_img('imgs/myScreen.png')
-    return cv2.cvtColor(sct_img, cv2.COLOR_BGRA2BGR)
+    # with mss() as sct:
+    #     sct_img = np.array(sct.grab(sct.monitors[config_data["screen_num"]]))
+
+    return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
 
 
 def match_img(myScreen, target_filename):
