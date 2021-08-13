@@ -1,7 +1,9 @@
 {
-    "team": 1,
+    "team": 2,
     "class": "術",
     "server": "CBA",
+    "prefer_card": "B",
+    "prefer_weak": true,
     "instructions": [
         [
             [2, 1, 1],
