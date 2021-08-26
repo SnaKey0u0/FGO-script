@@ -3,9 +3,9 @@ import json
 import tkinter.filedialog as fd
 import tkinter.messagebox as msg
 from threading import Thread
-from utils.monitor import set_config as set_monitor,testshot as ts
-from utils.mouse_clicker import set_config as set_mouse_clicker
-from utils.executor import start_playing, summon, set_config as set_executor
+from utils.monitor import set_config as set_monitor, testshot as ts
+from utils.window_controller import set_config as set_mouse_clicker
+from utils.executor import start_playing, summon, gift, set_config as set_executor
 from tkinter import NORMAL, DISABLED, PhotoImage, Label, Entry, StringVar, OptionMenu, Button, Tk
 
 config_data = {}
@@ -31,6 +31,19 @@ class SummonTaskHandler(Thread):
         else:
             n = int(entry_loop.get())
         summon(n)
+        # 啟用按鈕
+        btn_gogo.config(state=NORMAL)
+        btn_summon.config(state=NORMAL)
+        btn_testshot.config(state=NORMAL)
+
+
+class GiftTaskHandler(Thread):
+    def run(self):
+        if entry_loop.get() == "":
+            n = 999
+        else:
+            n = int(entry_loop.get())
+        gift(n)
         # 啟用按鈕
         btn_gogo.config(state=NORMAL)
         btn_summon.config(state=NORMAL)
@@ -68,6 +81,14 @@ def friend_summon():
     btn_summon.config(state=DISABLED)
     btn_testshot.config(state=DISABLED)
     SummonTaskHandler(daemon=True).start()
+
+
+def open_gift():
+    load_and_set()
+    btn_gogo.config(state=DISABLED)
+    btn_summon.config(state=DISABLED)
+    btn_testshot.config(state=DISABLED)
+    GiftTaskHandler(daemon=True).start()
 
 
 def num_validate(P):
@@ -114,7 +135,7 @@ if __name__ == '__main__':
     window = Tk()
     window.resizable(width=False, height=False)
     vcmd = (window.register(num_validate), '%P')
-    apples = ["銀蘋果", "金蘋果", "彩色蘋果"]
+    apples = ["銅蘋果", "銀蘋果", "金蘋果", "彩色蘋果"]
     # use_class = ["不變更", "全", "劍", "弓", "槍", "騎", "術", "殺", "狂", "外", "混"]
     # card_color = ["不在乎", "B", "A", "Q"]
 
@@ -184,7 +205,7 @@ if __name__ == '__main__':
     btn_exit.grid(column=2, row=4, padx=0, pady=4)
     btn_summon = Button(window, text='友抽', command=friend_summon)
     btn_summon.grid(column=1, row=0, padx=0, pady=5)
-    btn_box = Button(window, text='自動開箱')
+    btn_box = Button(window, text='自動開箱', command=open_gift)
     btn_box.grid(column=2, row=0, padx=0, pady=5)
 
     # 運行主程式

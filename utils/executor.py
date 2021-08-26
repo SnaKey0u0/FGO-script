@@ -1,7 +1,7 @@
 import time
 from utils.logger import *
 from utils.monitor import *
-from utils.mouse_clicker import *
+from utils.window_controller import *
 
 config_data = {}
 
@@ -135,8 +135,8 @@ def ending_game():
     grab_screen_and_click("close")
 
 
-def eat_apple(apples):
-    if not grab_screen_and_click(apples):
+def eat_apple(apple):
+    if not grab_screen_and_click(apple):
         if not grab_screen_and_click("confirm"):
             info("已進入關卡")
             time.sleep(1)
@@ -165,4 +165,22 @@ def summon(n):
         grab_screen_and_click("cont_summon")
         time.sleep(1)
     info("友抽結束")
+    grab_screen_and_click("close")
+
+
+def gift(n):
+    if not grab_screen_and_click("10gift"):
+        error("請至抽箱畫面")
+        return
+    info("抽箱開始")
+    time.sleep(1)
+    for i in range(n):
+        count = 0
+        while True:
+            count += 1
+            click(600, 600)
+            if count > 250000:
+                break
+
+    info("抽箱結束")
     grab_screen_and_click("close")
