@@ -2,7 +2,7 @@ import cv2
 import time
 import numpy as np
 from utils.logger import *
-from utils.mouse_clicker import *
+from utils.window_controller import *
 
 rate = 0.5
 config_data = {}
@@ -18,13 +18,13 @@ def show_img(img):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
+
 def testshot():
-    bmpstr = getWinBitStr(1920,1080)
+    bmpstr, width, height = getWinBitStr()
     img = np.frombuffer(bmpstr, dtype='uint8')
-    img.shape = (1080, 1920, 4)
+    img.shape = (height, width, 4)
     img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
     cv2.imwrite("myScreen.png", img)
-
 
 
 def click_match(rectangles):
@@ -39,13 +39,11 @@ def click_match(rectangles):
 
 
 def grab_screen():
-    bmpstr = getWinBitStr(1920,1080)
+    bmpstr, width, height = getWinBitStr()
     # convert the raw data into a format opencv can read
     img = np.frombuffer(bmpstr, dtype='uint8')
-    img.shape = (1080, 1920, 4)
+    img.shape = (height, width, 4)
     # img = np.ascontiguousarray(img)
-
-
 
     # The simplest use, save a screen shot of the 1st monitor
     # with mss() as sct:
@@ -178,17 +176,21 @@ def select_team(team_num):
     img = cv2.dilate(img, kernel, iterations=2)
     img = cv2.erode(img, kernel, iterations=2)
     contours, hierarchy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    foo = list()
-    for c in contours:
-        M = cv2.moments(c)
-        cX = int(M["m10"] / M["m00"])
-        cY = int(M["m01"] / M["m00"])
-        # print(cX)
-        foo.append((cX, cY))
-    foo.sort()
-    click(foo[team_num][0]*2+765, foo[team_num][1]*2+85)
-    time.sleep(1)
-    click(foo[team_num-1][0]*2+765, foo[team_num-1][1]*2+85)
+
+    try:
+        foo = list()
+        for c in contours:
+            M = cv2.moments(c)
+            cX = int(M["m10"] / M["m00"])
+            cY = int(M["m01"] / M["m00"])
+            # print(cX)
+            foo.append((cX, cY))
+        foo.sort()
+        click(foo[team_num][0]*2+765, foo[team_num][1]*2+85)
+        time.sleep(1)
+        click(foo[team_num-1][0]*2+765, foo[team_num-1][1]*2+85)
+    except Exception as e:
+        error("選擇隊伍錯誤，腳本停止")
 
 
 def select_card(prefer_card, prefer_weak):

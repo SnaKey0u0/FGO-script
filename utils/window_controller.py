@@ -36,7 +36,13 @@ def click(x, y):
     win32gui.PostMessage(hwnd, win32con.WM_LBUTTONUP, 0, lParam)
 
 
-def getWinBitStr(width, height):
+def getWinBitStr():
+    left, top, right, bottom = win32gui.GetWindowRect(hwnd)
+    width = right - left
+    height = bottom - top
+    # 待修改
+    width, height = 1920, 1080
+
     hwindc = win32gui.GetWindowDC(hwnd)
     srcdc = win32ui.CreateDCFromHandle(hwindc)
     memdc = srcdc.CreateCompatibleDC()
@@ -65,7 +71,7 @@ def getWinBitStr(width, height):
     win32gui.ReleaseDC(hwnd, hwindc)
     win32gui.DeleteObject(bmp.GetHandle())
 
-    return bmpstr
+    return bmpstr, width, height
 
 
 # if __name__ == "__main__":
