@@ -30,8 +30,9 @@ script for lazy people (ex: me)
 
 ## Todo
 
+    自動開箱(ing)
     選擇職階
-    自動開箱
+    選擇禮裝
     選取從者下拉
     優化時間間隔
     增強例外處理
