@@ -38,7 +38,6 @@ script for lazy people (ex: me)
 ## Todo
 
     選擇職階
-    吃銅蘋果
     自動開箱
     選取從者下拉
     優化時間間隔

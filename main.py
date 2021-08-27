@@ -4,7 +4,7 @@ import tkinter.filedialog as fd
 import tkinter.messagebox as msg
 from threading import Thread
 from utils.monitor import set_config as set_monitor, testshot as ts
-from utils.window_controller import set_config as set_mouse_clicker
+from utils.window_controller import ask_config
 from utils.executor import start_playing, summon, gift, set_config as set_executor
 from tkinter import NORMAL, DISABLED, PhotoImage, Label, Entry, StringVar, OptionMenu, Button, Tk
 
@@ -54,9 +54,13 @@ def load_and_set():
     global config_data
     with open('positions_config.json', 'r', encoding='utf-8') as config_file:
         config_data = json.load(config_file)
-    set_executor(config_data)
-    set_monitor(config_data)
-    set_mouse_clicker()
+    width, height = ask_config()
+    rateX = width / 1873
+    rateY = height / 1040
+    for k, v in config_data.items():
+        config_data[k] = [int(v[0]*rateX), int(v[1]*rateY)]
+    set_executor(config_data,rateX,rateY)
+    set_monitor(config_data,rateX,rateY)
 
 
 def gogo():

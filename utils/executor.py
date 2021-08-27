@@ -4,11 +4,15 @@ from utils.monitor import *
 from utils.window_controller import *
 
 config_data = {}
+rateX = 1
+rateY = 1
 
 
-def set_config(config):
-    global config_data
+def set_config(config, X, Y):
+    global config_data, rateX, rateY
     config_data = config
+    rateX = X
+    rateY = Y
 
 
 def print_config():
@@ -160,7 +164,7 @@ def summon(n):
     for i in range(n):
         grab_screen_and_click("confirm")
         time.sleep(5)
-        click(1800, 87)
+        click(250, 50)
         time.sleep(1)
         grab_screen_and_click("cont_summon")
         time.sleep(1)
