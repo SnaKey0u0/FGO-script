@@ -1,8 +1,9 @@
 import sys
 import json
+import ctypes
 import tkinter.filedialog as fd
 import tkinter.messagebox as msg
-from threading import Thread
+import threading
 from utils.monitor import set_config as set_monitor, testshot as ts
 from utils.window_controller import ask_config
 from utils.executor import start_playing, summon, gift, set_config as set_executor
@@ -12,7 +13,25 @@ config_data = {}
 myThread = None
 
 
-class ExecuteTaskHandler(Thread):
+class motherHandler(threading.Thread):
+    def get_id(self):
+        # returns id of the respective thread
+        if hasattr(self, '_thread_id'):
+            return self._thread_id
+        for id, thread in threading._active.items():
+            if thread is self:
+                return id
+
+    def raise_exception(self):
+        thread_id = self.get_id()
+        res = ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id,
+                                                         ctypes.py_object(SystemExit))
+        if res > 1:
+            ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 0)
+            print('Exception raise failure')
+
+
+class ExecuteTaskHandler(motherHandler):
     def run(self):
         info_obj = create_info()
         if info_obj != None:
@@ -22,7 +41,7 @@ class ExecuteTaskHandler(Thread):
         enableBtn()
 
 
-class SummonTaskHandler(Thread):
+class SummonTaskHandler(motherHandler):
     def run(self):
         if entry_loop.get() == "":
             n = 999
@@ -32,7 +51,7 @@ class SummonTaskHandler(Thread):
         enableBtn()
 
 
-class GiftTaskHandler(Thread):
+class GiftTaskHandler(motherHandler):
     def run(self):
         if entry_loop.get() == "":
             n = 999
@@ -130,7 +149,8 @@ def disableBtn():
 
 
 def exit():
-    sys.exit()
+    myThread.raise_exception()
+    enableBtn()
 
 
 if __name__ == '__main__':

@@ -168,8 +168,10 @@ def summon(n):
         time.sleep(1)
         grab_screen_and_click("cont_summon")
         time.sleep(1)
-    info("友抽結束")
     grab_screen_and_click("close")
+    time.sleep(1)
+    grab_screen_and_click("close2")
+    info("友抽結束")
 
 
 def gift(n):
