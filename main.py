@@ -9,6 +9,7 @@ from utils.executor import start_playing, summon, gift, set_config as set_execut
 from tkinter import NORMAL, DISABLED, PhotoImage, Label, Entry, StringVar, OptionMenu, Button, Tk
 
 config_data = {}
+myThread = None
 
 
 class ExecuteTaskHandler(Thread):
@@ -18,10 +19,7 @@ class ExecuteTaskHandler(Thread):
             start_playing(info_obj)
         else:
             msg.showinfo("script error", "請選擇腳本")
-        # 啟用按鈕
-        btn_gogo.config(state=NORMAL)
-        btn_summon.config(state=NORMAL)
-        btn_testshot.config(state=NORMAL)
+        enableBtn()
 
 
 class SummonTaskHandler(Thread):
@@ -31,10 +29,7 @@ class SummonTaskHandler(Thread):
         else:
             n = int(entry_loop.get())
         summon(n)
-        # 啟用按鈕
-        btn_gogo.config(state=NORMAL)
-        btn_summon.config(state=NORMAL)
-        btn_testshot.config(state=NORMAL)
+        enableBtn()
 
 
 class GiftTaskHandler(Thread):
@@ -44,10 +39,7 @@ class GiftTaskHandler(Thread):
         else:
             n = int(entry_loop.get())
         gift(n)
-        # 啟用按鈕
-        btn_gogo.config(state=NORMAL)
-        btn_summon.config(state=NORMAL)
-        btn_testshot.config(state=NORMAL)
+        enableBtn()
 
 
 def load_and_set():
@@ -59,40 +51,36 @@ def load_and_set():
     rateY = height / 1040
     for k, v in config_data.items():
         config_data[k] = [int(v[0]*rateX), int(v[1]*rateY)]
-    set_executor(config_data,rateX,rateY)
-    set_monitor(config_data,rateX,rateY)
+    set_executor(config_data, rateX, rateY)
+    set_monitor(config_data, rateX, rateY)
 
 
 def gogo():
-    # 匯入設定檔
+    global myThread
     load_and_set()
-    # 禁用按鈕
-    btn_gogo.config(state=DISABLED)
-    btn_summon.config(state=DISABLED)
-    btn_testshot.config(state=DISABLED)
-    ExecuteTaskHandler(daemon=True).start()
+    disableBtn()
+    myThread = ExecuteTaskHandler(daemon=True)
+    myThread.start()
 
 
 def testshot():
-    # 匯入設定檔
     load_and_set()
     ts()
 
 
 def friend_summon():
+    global myThread
     load_and_set()
-    btn_gogo.config(state=DISABLED)
-    btn_summon.config(state=DISABLED)
-    btn_testshot.config(state=DISABLED)
-    SummonTaskHandler(daemon=True).start()
+    disableBtn()
+    myThread = SummonTaskHandler(daemon=True)
+    myThread.start()
 
 
 def open_gift():
     load_and_set()
-    btn_gogo.config(state=DISABLED)
-    btn_summon.config(state=DISABLED)
-    btn_testshot.config(state=DISABLED)
-    GiftTaskHandler(daemon=True).start()
+    disableBtn()
+    myThread = GiftTaskHandler(daemon=True)
+    myThread.start()
 
 
 def num_validate(P):
@@ -127,6 +115,18 @@ def create_info():
         return info_obj
     except:
         return None
+
+
+def enableBtn():
+    btn_gogo.config(state=NORMAL)
+    btn_summon.config(state=NORMAL)
+    btn_testshot.config(state=NORMAL)
+
+
+def disableBtn():
+    btn_gogo.config(state=DISABLED)
+    btn_summon.config(state=DISABLED)
+    btn_testshot.config(state=DISABLED)
 
 
 def exit():
