@@ -53,31 +53,29 @@ def grab_screen():
 
 def match_img(myScreen, target_filename):
     # img = cv2.resize(myScreen, (0, 0), fy=rate, fx=rate)
-    img = myScreen
+    
     # 解決中文路徑問題
     target_img = cv2.imdecode(np.fromfile('imgs/'+target_filename+'.png', dtype=np.uint8), -1)
     target_img = cv2.cvtColor(target_img, cv2.COLOR_BGRA2BGR)
-    # target_img = cv2.imread('imgs/'+target_filename+'.png')
     target_img = cv2.resize(target_img, (0, 0), fy=rateY, fx=rateX)
-    # show_img(img)
-    # show_img(target_img)
+
     # 匹配
-    result = cv2.matchTemplate(img, target_img, cv2.TM_CCOEFF_NORMED)
+    result = cv2.matchTemplate(myScreen, target_img, cv2.TM_CCOEFF_NORMED)
 
     # 定義圖片大小
     w = target_img.shape[1]
     h = target_img.shape[0]
-    # min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-    # info("matched max value"+str(max_val))
-    # info("matched max value"+str(max_loc))
-    # show_img(img)
 
-    # 過濾區域
+    # 過濾門檻
     threshold = .70
-    if (target_filename == "confirm" or target_filename == "close"):
+
+    # 選最像的地方
+    if (target_filename == "confirm" or target_filename == "close"or target_filename == "teams"):
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
         if max_val > threshold:
             return [(max_loc[0], max_loc[1], w, h)]
+
+    # 篩選高分區域
     yloc, xloc = np.where(result >= threshold)
 
     # 準備合併相似區域
@@ -88,10 +86,6 @@ def match_img(myScreen, target_filename):
 
     # 合併相似區域
     rectangles, weights = cv2.groupRectangles(rectangles, 1, 0.2)
-
-    # for (x, y, w, h) in rectangles:
-    #     cv2.rectangle(img, (x, y), (x+w, y+h), (0, 225, 225), 2)
-    # show_img(img)
 
     return rectangles
 
@@ -113,10 +107,9 @@ def wait_until(target_filename):
     while True:
         now = time.time()
         if (now - start) > 30:
-            error("過場中斷")
+            error("過場中斷，若頻繁出現可能是電腦出現卡頓，建議重開")
             return False
         time.sleep(0.3)
-        # print("waiting for "+ target_filename)
         myScreen = grab_screen()
         rectangles = match_img(myScreen, target_filename)
         if len(rectangles) > 0:
@@ -172,12 +165,12 @@ def select_team(team_num):
     myScreen = grab_screen()
     # img = myScreen[85:115, 705:1050]
     # img = myScreen[int(85*rateY):int(115*rateY), int(705*rateX):int(1050*rateX)]
+    img = cv2.imread("imgs/teams.png")
 
     r = match_img(myScreen, "teams")
     if(len(r) > 0):
         (x, y, w, h) = r[0]
 
-    img = cv2.imread("imgs/teams.png")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
     img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
