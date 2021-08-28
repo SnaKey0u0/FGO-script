@@ -3,6 +3,7 @@ import ctypes
 import tkinter.filedialog as fd
 import tkinter.messagebox as msg
 import threading
+from utils.logger import *
 from utils.monitor import set_config as set_monitor, testshot as ts
 from utils.window_controller import ask_config
 from utils.executor import start_playing, summon, gift, set_config as set_executor
@@ -65,8 +66,13 @@ def load_and_set():
     with open('positions_config.json', 'r', encoding='utf-8') as config_file:
         config_data = json.load(config_file)
     width, height = ask_config()
-    rateX = width / 1873
-    rateY = height / 1040
+    bias = 0
+    if width == 1920:
+        bias = 92
+    rateX = (width-42-bias) / 1788
+    rateY = (height-34) / 1008
+    info(rateX)
+    info(rateY)
     for k, v in config_data.items():
         config_data[k] = [int(v[0]*rateX), int(v[1]*rateY)]
     set_executor(config_data, rateX, rateY)
