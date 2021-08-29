@@ -1,11 +1,10 @@
 import json
 import ctypes
+import threading
 import tkinter.filedialog as fd
 import tkinter.messagebox as msg
-import threading
-from utils.logger import *
-from utils.monitor import set_config as set_monitor, testshot as ts
 from utils.window_controller import ask_config
+from utils.monitor import set_config as set_monitor, testshot as ts
 from utils.executor import start_playing, summon, gift, set_config as set_executor
 from tkinter import NORMAL, DISABLED, PhotoImage, Label, Entry, StringVar, OptionMenu, Button, Tk
 
@@ -71,10 +70,10 @@ def load_and_set():
         bias = 92
     rateX = (width-42-bias) / 1788
     rateY = (height-34) / 1008
-    info(rateX)
-    info(rateY)
+    rateX = round(rateX,2)
+    rateY = round(rateY,2)
     for k, v in config_data.items():
-        config_data[k] = [int(v[0]*rateX), int(v[1]*rateY)]
+        config_data[k] = [int(v[0]-47)*rateX+2, int(v[1]-32)*rateY+32]
     set_executor(config_data, rateX, rateY)
     set_monitor(config_data, rateX, rateY)
 
@@ -101,6 +100,7 @@ def friend_summon():
 
 
 def open_gift():
+    global myThread
     load_and_set()
     disableBtn()
     myThread = GiftTaskHandler(daemon=True)
@@ -142,12 +142,14 @@ def create_info():
 
 
 def enableBtn():
+    btn_box.config(state=NORMAL)
     btn_gogo.config(state=NORMAL)
     btn_summon.config(state=NORMAL)
     btn_testshot.config(state=NORMAL)
 
 
 def disableBtn():
+    btn_box.config(state=DISABLED)
     btn_gogo.config(state=DISABLED)
     btn_summon.config(state=DISABLED)
     btn_testshot.config(state=DISABLED)

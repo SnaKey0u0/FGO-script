@@ -180,13 +180,20 @@ def gift(n):
         return
     info("抽箱開始")
     time.sleep(1)
+    pos = config_data["gift"]
     for i in range(n):
-        count = 0
+        start = time.time()
         while True:
-            count += 1
-            click(600, 600)
-            if count > 250000:
+            click(pos[0], pos[1])
+            time.sleep(0.5)
+            now = time.time()
+            if (now - start) > 45:
                 break
+        grab_screen_and_click("refresh_box")
+        time.sleep(1)
+        grab_screen_and_click("do_it")
+        time.sleep(1)
+        grab_screen_and_click("close")
+        time.sleep(1)
 
     info("抽箱結束")
-    grab_screen_and_click("close")

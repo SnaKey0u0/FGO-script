@@ -53,7 +53,7 @@ def grab_screen():
 
 def match_img(myScreen, target_filename):
     # img = cv2.resize(myScreen, (0, 0), fy=rate, fx=rate)
-    
+
     # 解決中文路徑問題
     target_img = cv2.imdecode(np.fromfile('imgs/'+target_filename+'.png', dtype=np.uint8), -1)
     target_img = cv2.cvtColor(target_img, cv2.COLOR_BGRA2BGR)
@@ -67,10 +67,10 @@ def match_img(myScreen, target_filename):
     h = target_img.shape[0]
 
     # 過濾門檻
-    threshold = .70
+    threshold = .60
 
     # 選最像的地方
-    if (target_filename == "confirm" or target_filename == "close"or target_filename == "teams"):
+    if (target_filename == "confirm" or target_filename == "close" or target_filename == "teams"):
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
         if max_val > threshold:
             return [(max_loc[0], max_loc[1], w, h)]
@@ -174,11 +174,12 @@ def select_team(team_num):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
     img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
-    img = cv2.medianBlur(img, 5)
+    img = cv2.medianBlur(img, 3)
     img = 255-img
     kernel = np.ones((3, 3), np.uint8)
     img = cv2.dilate(img, kernel, iterations=2)
-    img = cv2.erode(img, kernel, iterations=2)
+    # show_img(img)
+    # img = cv2.erode(img, kernel, iterations=4)
     # show_img(img)
     contours, hierarchy = cv2.findContours(img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # print(len(contours))
@@ -191,7 +192,12 @@ def select_team(team_num):
             # print(cX)
             foo.append((cX, cY))
         foo.sort()
-        click(foo[team_num][0]*2*rateX+x, foo[team_num][1]*2*rateY+y)
+        # 點擊測試
+        # for i in range(1, 1210):
+        #     click(foo[i % 10][0]*2*rateX+x, foo[i % 10][1]*2*rateY+y)
+        #     time.sleep(0.5)
+        # time.sleep(100)
+        click(foo[team_num % 10][0]*2*rateX+x, foo[team_num % 10][1]*2*rateY+y)
         time.sleep(1)
         click(foo[team_num-1][0]*2*rateX+x, foo[team_num-1][1]*2*rateY+y)
     except Exception as e:

@@ -17,7 +17,7 @@ script for lazy people (ex: me)
 -   [x] 開始前可進行截圖測試(會在根目錄生成myScreen.png)
 -   [x] 各別腳本可至scripts資料夾根據模板建立(選擇職階目前沒用)
 -   [x] loop留白視為999次
--   [x] 模擬器請勿最大或全螢幕，不然可能會有點擊誤差的情形
+-   [x] 模擬器請勿全螢幕，不然可能會有點擊誤差的情形
 -   [x] 開始執行後勿再縮放模擬器
 
 ## 指令說明
@@ -47,7 +47,7 @@ APP(放棄)
 
 ## 測試版 EXE
 
-[MEGA 下載](https://mega.nz/file/oy5AQZYA#1xfskIrAFqQDQb7cgsNftCSBVTCTdP1c4yy6Pvs2xww)
+[MEGA 下載](https://mega.nz/file/lvpWUJzR#4rZi0wRYdAfzjcr8qOE8wsjqmq-VpmB8trkRlsriZ2I)
 
 ## 圖片來源
 
