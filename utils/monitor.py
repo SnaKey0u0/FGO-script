@@ -22,12 +22,12 @@ def show_img(img):
     cv2.destroyAllWindows()
 
 
-def testshot():
+def testshot(name="myScreen"):
     bmpstr, width, height = getWinBitStr()
     img = np.frombuffer(bmpstr, dtype='uint8')
     img.shape = (height, width, 4)
     img = cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
-    cv2.imwrite("myScreen.png", img)
+    cv2.imwrite(name+".png", img)
 
 
 def grab_screen_and_click(target_filename):
@@ -106,19 +106,23 @@ def wait_until(target_filename):
     info("waiting for " + target_filename)
     while True:
         now = time.time()
-        if (now - start) > 30:
-            error("過場中斷，若頻繁出現可能是電腦出現卡頓，建議重開")
+        if (now - start) > 60:
+            # cv2.imwrite("ggFuck.png", myScreen)
+            error("過場中斷，可能是網路不穩定或電腦卡頓")
             return False
-        time.sleep(0.3)
         myScreen = grab_screen()
         rectangles = match_img(myScreen, target_filename)
         if len(rectangles) > 0:
             if target_filename == "wave":
                 info("enter a new wave")
                 time.sleep(8)
+            elif target_filename == "attack":
+                info("enter a new wave")
+                time.sleep(1)
             else:
                 info("ending game")
             return True
+        time.sleep(0.3)
 
 
 # def switch_server(front, back):
@@ -162,15 +166,13 @@ def wait_until(target_filename):
 
 
 def select_team(team_num):
-    myScreen = grab_screen()
-    # img = myScreen[85:115, 705:1050]
-    # img = myScreen[int(85*rateY):int(115*rateY), int(705*rateX):int(1050*rateX)]
+    # myScreen = grab_screen()
+
+    # r = match_img(myScreen, "teams")
+    # if(len(r) > 0):
+    #     (x, y, w, h) = r[0]
+
     img = cv2.imread("imgs/teams.png")
-
-    r = match_img(myScreen, "teams")
-    if(len(r) > 0):
-        (x, y, w, h) = r[0]
-
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
     img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
@@ -197,9 +199,9 @@ def select_team(team_num):
         #     click(foo[i % 10][0]*2*rateX+x, foo[i % 10][1]*2*rateY+y)
         #     time.sleep(0.5)
         # time.sleep(100)
-        click(foo[team_num % 10][0]*2*rateX+x, foo[team_num % 10][1]*2*rateY+y)
+        click(foo[team_num % 10][0]*2*rateX+config_data["teams"][0], foo[team_num % 10][1]*2*rateY+config_data["teams"][1])
         time.sleep(1)
-        click(foo[team_num-1][0]*2*rateX+x, foo[team_num-1][1]*2*rateY+y)
+        click(foo[team_num-1][0]*2*rateX+config_data["teams"][0], foo[team_num-1][1]*2*rateY+config_data["teams"][1])
     except Exception as e:
         error(e)
         error("選擇隊伍錯誤，腳本停止")
