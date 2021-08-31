@@ -3,6 +3,7 @@ import ctypes
 import threading
 import tkinter.filedialog as fd
 import tkinter.messagebox as msg
+from utils.logger import *
 from utils.window_controller import ask_config
 from utils.monitor import set_config as set_monitor, testshot as ts
 from utils.executor import start_playing, summon, gift, set_config as set_executor
@@ -70,10 +71,13 @@ def load_and_set():
         bias = 92
     rateX = (width-42-bias) / 1788
     rateY = (height-34) / 1008
-    rateX = round(rateX,2)
-    rateY = round(rateY,2)
-    for k, v in config_data.items():
-        config_data[k] = [int(v[0]-47)*rateX+2, int(v[1]-32)*rateY+32]
+    rateX = round(rateX, 2)
+    rateY = round(rateY, 2)
+    info(rateX)
+    info(rateY)
+    if width != 1920:
+        for k, v in config_data.items():
+            config_data[k] = [int(v[0]-47)*rateX+2, int(v[1]-32)*rateY+32]
     set_executor(config_data, rateX, rateY)
     set_monitor(config_data, rateX, rateY)
 

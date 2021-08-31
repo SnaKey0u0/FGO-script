@@ -121,6 +121,7 @@ def wait_until(target_filename):
                 time.sleep(1)
             else:
                 info("ending game")
+                time.sleep(1)
             return True
         time.sleep(0.3)
 

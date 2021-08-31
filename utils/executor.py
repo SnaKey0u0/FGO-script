@@ -30,7 +30,7 @@ def start_playing(info_obj):
                     error("opps! something went wrong, script stop!")
                     error("找不到關卡進入點")
                     return
-            time.sleep(1)
+            time.sleep(2)
             if grab_screen_and_click("apple_page"):
                 if not eat_apple(info_obj["apples"]):
                     return
@@ -75,12 +75,12 @@ def start_playing(info_obj):
                 return
             ending_game()
             info("等待結束動畫")
-            time.sleep(10)
             if first_enter:
-                first_enter = False
                 info("第一次進入關卡")
+                wait_until("click_screen")
                 grab_screen_and_click("click_screen")
-                time.sleep(4)
+                first_enter = False
+            wait_until("select_episode1")
         info("腳本結束")
     except:
         return
@@ -101,10 +101,10 @@ def use_cloth(step):
     # 換人
     elif len(step) == 3:
         # switch_server(step[1], step[2])
-        pos = config_data["switch_pick"+str(step[1])]
+        pos = config_data["switch-pick"+str(step[1])]
         click(pos[0], pos[1])
         time.sleep(1)
-        pos = config_data["switch_pick"+str(step[2])]
+        pos = config_data["switch-pick"+str(step[2])]
         click(pos[0], pos[1])
         time.sleep(1)
         grab_screen_and_click("switch")
