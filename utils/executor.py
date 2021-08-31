@@ -4,11 +4,15 @@ from utils.monitor import *
 from utils.window_controller import *
 
 config_data = {}
+rateX = 1
+rateY = 1
 
 
-def set_config(config):
-    global config_data
+def set_config(config, X, Y):
+    global config_data, rateX, rateY
     config_data = config
+    rateX = X
+    rateY = Y
 
 
 def print_config():
@@ -26,9 +30,10 @@ def start_playing(info_obj):
                     error("opps! something went wrong, script stop!")
                     error("找不到關卡進入點")
                     return
-            time.sleep(1)
-            if not eat_apple(info_obj["apples"]):
-                return
+            time.sleep(2)
+            if grab_screen_and_click("apple_page"):
+                if not eat_apple(info_obj["apples"]):
+                    return
             first_refresh = True
             while not grab_screen_and_click(info_obj["server"]):
                 if first_refresh:
@@ -45,7 +50,7 @@ def start_playing(info_obj):
             time.sleep(3)
             grab_screen_and_click("start_episode")
             for wave in info_obj["instructions"]:
-                if not wait_until("wave"):
+                if not wait_until("attack"):
                     return
                 for step in wave:
                     info("技能施放")
@@ -70,12 +75,12 @@ def start_playing(info_obj):
                 return
             ending_game()
             info("等待結束動畫")
-            time.sleep(10)
             if first_enter:
-                first_enter = False
                 info("第一次進入關卡")
+                wait_until("click_screen")
                 grab_screen_and_click("click_screen")
-                time.sleep(4)
+                first_enter = False
+            wait_until("select_episode1")
         info("腳本結束")
     except:
         return
@@ -96,10 +101,10 @@ def use_cloth(step):
     # 換人
     elif len(step) == 3:
         # switch_server(step[1], step[2])
-        pos = config_data["switch_pick"+str(step[1])]
+        pos = config_data["switch-pick"+str(step[1])]
         click(pos[0], pos[1])
         time.sleep(1)
-        pos = config_data["switch_pick"+str(step[2])]
+        pos = config_data["switch-pick"+str(step[2])]
         click(pos[0], pos[1])
         time.sleep(1)
         grab_screen_and_click("switch")
@@ -124,10 +129,13 @@ def use_ult(step):
 
 
 def ending_game():
-    grab_screen_and_click("click_screen")
-    time.sleep(3)
-    grab_screen_and_click("click_screen")
-    time.sleep(3)
+    for i in range(8):
+        click(250, 50)
+        time.sleep(0.5)
+    # grab_screen_and_click("click_screen")
+    # time.sleep(3)
+    # grab_screen_and_click("click_screen")
+    # time.sleep(3)
     grab_screen_and_click("next")
     time.sleep(3)
     if grab_screen_and_click("no_apply"):
@@ -136,6 +144,9 @@ def ending_game():
 
 
 def eat_apple(apple):
+    if apple == "銅蘋果":
+        grab_screen_and_click("scroll_bar")
+        time.sleep(1)
     if not grab_screen_and_click(apple):
         if not grab_screen_and_click("confirm"):
             info("已進入關卡")
@@ -160,27 +171,49 @@ def summon(n):
     for i in range(n):
         grab_screen_and_click("confirm")
         time.sleep(5)
-        click(1800, 87)
+        click(250, 50)
         time.sleep(1)
         grab_screen_and_click("cont_summon")
         time.sleep(1)
-    info("友抽結束")
     grab_screen_and_click("close")
+    time.sleep(1)
+    grab_screen_and_click("close2")
+    info("友抽結束")
 
 
 def gift(n):
-    if not grab_screen_and_click("10gift"):
-        error("請至抽箱畫面")
-        return
     info("抽箱開始")
-    time.sleep(1)
+    full_flag = False
+    pos = config_data["gift"]
     for i in range(n):
+        if not grab_screen_and_click("10gift"):
+            if not grab_screen_and_click("refresh_box"):
+                error("請至抽箱畫面")
+                return
+            else:
+                time.sleep(1)
+                grab_screen_and_click("do_it")
+                time.sleep(2)
+                grab_screen_and_click("close")
+        time.sleep(1)
         count = 0
         while True:
+            click(pos[0], pos[1])
+            time.sleep(0.5)
             count += 1
-            click(600, 600)
-            if count > 250000:
-                break
-
+            if count % 10 == 0:
+                if grab_screen_and_click("1gift"):
+                    break
+                if grab_screen_and_click("move_to_box"):
+                    full_flag = True
+                    break
+        if full_flag:
+            warning("禮物箱已滿")
+            break
+        grab_screen_and_click("refresh_box")
+        time.sleep(1)
+        grab_screen_and_click("do_it")
+        time.sleep(2)
+        grab_screen_and_click("close")
+        time.sleep(1)
     info("抽箱結束")
-    grab_screen_and_click("close")

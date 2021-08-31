@@ -1,22 +1,31 @@
+import win32ui
 import win32gui
 import win32api
 import win32con
-import win32ui
 from utils.logger import *
 # from ctypes import windll
 
 # config_data = {}
 hwnd = None
+width = 1920
+height = 1080
 
 
-def set_config():
+def ask_config():
     # global config_data
     # config_data = config
     try:
-        global hwnd
+        global hwnd, width, height
         hwnd = win32gui.FindWindow(None, "夜神模擬器")
+        left, top, right, bottom = win32gui.GetWindowRect(hwnd)
+        width = right - left
+        height = bottom - top
+        return width, height
+        # 待修改
+        # width, height = 1920, 1080
     except Exception as e:
         error(e)
+        return False
 
 
 # def click(x, y, d=0.1):
@@ -37,11 +46,6 @@ def click(x, y):
 
 
 def getWinBitStr():
-    left, top, right, bottom = win32gui.GetWindowRect(hwnd)
-    width = right - left
-    height = bottom - top
-    # 待修改
-    width, height = 1920, 1080
 
     hwindc = win32gui.GetWindowDC(hwnd)
     srcdc = win32ui.CreateDCFromHandle(hwindc)

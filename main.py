@@ -1,94 +1,114 @@
-import sys
 import json
+import ctypes
+import threading
 import tkinter.filedialog as fd
 import tkinter.messagebox as msg
-from threading import Thread
+from utils.logger import *
+from utils.window_controller import ask_config
 from utils.monitor import set_config as set_monitor, testshot as ts
-from utils.window_controller import set_config as set_mouse_clicker
 from utils.executor import start_playing, summon, gift, set_config as set_executor
 from tkinter import NORMAL, DISABLED, PhotoImage, Label, Entry, StringVar, OptionMenu, Button, Tk
 
 config_data = {}
+myThread = None
 
 
-class ExecuteTaskHandler(Thread):
+class motherHandler(threading.Thread):
+    def get_id(self):
+        # returns id of the respective thread
+        if hasattr(self, '_thread_id'):
+            return self._thread_id
+        for id, thread in threading._active.items():
+            if thread is self:
+                return id
+
+    def raise_exception(self):
+        thread_id = self.get_id()
+        res = ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id,
+                                                         ctypes.py_object(SystemExit))
+        if res > 1:
+            ctypes.pythonapi.PyThreadState_SetAsyncExc(thread_id, 0)
+            print('Exception raise failure')
+
+
+class ExecuteTaskHandler(motherHandler):
     def run(self):
         info_obj = create_info()
         if info_obj != None:
             start_playing(info_obj)
         else:
             msg.showinfo("script error", "請選擇腳本")
-        # 啟用按鈕
-        btn_gogo.config(state=NORMAL)
-        btn_summon.config(state=NORMAL)
-        btn_testshot.config(state=NORMAL)
+        enableBtn()
 
 
-class SummonTaskHandler(Thread):
+class SummonTaskHandler(motherHandler):
     def run(self):
         if entry_loop.get() == "":
             n = 999
         else:
             n = int(entry_loop.get())
         summon(n)
-        # 啟用按鈕
-        btn_gogo.config(state=NORMAL)
-        btn_summon.config(state=NORMAL)
-        btn_testshot.config(state=NORMAL)
+        enableBtn()
 
 
-class GiftTaskHandler(Thread):
+class GiftTaskHandler(motherHandler):
     def run(self):
         if entry_loop.get() == "":
             n = 999
         else:
             n = int(entry_loop.get())
         gift(n)
-        # 啟用按鈕
-        btn_gogo.config(state=NORMAL)
-        btn_summon.config(state=NORMAL)
-        btn_testshot.config(state=NORMAL)
+        enableBtn()
 
 
 def load_and_set():
     global config_data
     with open('positions_config.json', 'r', encoding='utf-8') as config_file:
         config_data = json.load(config_file)
-    set_executor(config_data)
-    set_monitor(config_data)
-    set_mouse_clicker()
+    width, height = ask_config()
+    bias = 0
+    if width == 1920:
+        bias = 92
+    rateX = (width-42-bias) / 1788
+    rateY = (height-34) / 1008
+    rateX = round(rateX, 2)
+    rateY = round(rateY, 2)
+    info(rateX)
+    info(rateY)
+    if width != 1920:
+        for k, v in config_data.items():
+            config_data[k] = [int(v[0]-47)*rateX+2, int(v[1]-32)*rateY+32]
+    set_executor(config_data, rateX, rateY)
+    set_monitor(config_data, rateX, rateY)
 
 
 def gogo():
-    # 匯入設定檔
+    global myThread
     load_and_set()
-    # 禁用按鈕
-    btn_gogo.config(state=DISABLED)
-    btn_summon.config(state=DISABLED)
-    btn_testshot.config(state=DISABLED)
-    ExecuteTaskHandler(daemon=True).start()
+    disableBtn()
+    myThread = ExecuteTaskHandler(daemon=True)
+    myThread.start()
 
 
 def testshot():
-    # 匯入設定檔
     load_and_set()
     ts()
 
 
 def friend_summon():
+    global myThread
     load_and_set()
-    btn_gogo.config(state=DISABLED)
-    btn_summon.config(state=DISABLED)
-    btn_testshot.config(state=DISABLED)
-    SummonTaskHandler(daemon=True).start()
+    disableBtn()
+    myThread = SummonTaskHandler(daemon=True)
+    myThread.start()
 
 
 def open_gift():
+    global myThread
     load_and_set()
-    btn_gogo.config(state=DISABLED)
-    btn_summon.config(state=DISABLED)
-    btn_testshot.config(state=DISABLED)
-    GiftTaskHandler(daemon=True).start()
+    disableBtn()
+    myThread = GiftTaskHandler(daemon=True)
+    myThread.start()
 
 
 def num_validate(P):
@@ -125,8 +145,23 @@ def create_info():
         return None
 
 
+def enableBtn():
+    btn_box.config(state=NORMAL)
+    btn_gogo.config(state=NORMAL)
+    btn_summon.config(state=NORMAL)
+    btn_testshot.config(state=NORMAL)
+
+
+def disableBtn():
+    btn_box.config(state=DISABLED)
+    btn_gogo.config(state=DISABLED)
+    btn_summon.config(state=DISABLED)
+    btn_testshot.config(state=DISABLED)
+
+
 def exit():
-    sys.exit()
+    myThread.raise_exception()
+    enableBtn()
 
 
 if __name__ == '__main__':
