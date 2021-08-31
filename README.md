@@ -1,6 +1,10 @@
 # FGO-script
+
     本來是想做給自己用的，但越做越起勁了0u0
-    [MEGA 下載](https://mega.nz/file/l2pCUQwa#MMec-YkSR8V_w7EZOnaT253_xp1VCgVy7X5ABuRV8QI)
+
+# EXE 載點
+
+[MEGA 下載](https://mega.nz/file/l2pCUQwa#MMec-YkSR8V_w7EZOnaT253_xp1VCgVy7X5ABuRV8QI)
 
 ## 特色
 
