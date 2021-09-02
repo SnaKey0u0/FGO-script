@@ -4,7 +4,7 @@
 
 ## EXE 載點
 
-[MEGA 下載](https://mega.nz/file/l2pCUQwa#MMec-YkSR8V_w7EZOnaT253_xp1VCgVy7X5ABuRV8QI)
+[MEGA 下載](https://mega.nz/file/Im5VlSoY#gnvfAduAO3upIV_F54PMrthiWTaldkAQK92FEK32WKo)
 
 ## 特色
 
@@ -16,6 +16,7 @@
 
 ## 注意事項
 
+-   [x] windows螢幕縮放請設定成100%
 -   [x] 不可縮小畫面至工具列
 -   [x] 模擬器的名字必須是"夜神模擬器"
 -   [x] 開始執行後勿再縮放模擬器

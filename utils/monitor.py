@@ -70,7 +70,7 @@ def match_img(myScreen, target_filename):
     threshold = .60
 
     # 選最像的地方
-    if (target_filename == "confirm" or target_filename == "close" or target_filename == "teams"):
+    if (target_filename == "confirm" or target_filename == "close" or target_filename == "yes"):
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
         if max_val > threshold:
             return [(max_loc[0], max_loc[1], w, h)]
@@ -196,9 +196,9 @@ def select_team(team_num):
             foo.append((cX, cY))
         foo.sort()
         # 點擊測試
-        # for i in range(1, 1210):
-        #     click(foo[i % 10][0]*2*rateX+x, foo[i % 10][1]*2*rateY+y)
-        #     time.sleep(0.5)
+        # for i in range(1, 11):
+        #     click(foo[i - 1][0]*2*rateX+config_data["teams"][0], foo[i - 1][1]*2*rateY+config_data["teams"][1])
+        #     time.sleep(1)
         # time.sleep(100)
         click(foo[team_num % 10][0]*2*rateX+config_data["teams"][0], foo[team_num % 10][1]*2*rateY+config_data["teams"][1])
         time.sleep(1)
