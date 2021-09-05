@@ -4,7 +4,7 @@
 
 ## EXE 載點
 
-[MEGA 下載](https://mega.nz/file/Im5VlSoY#gnvfAduAO3upIV_F54PMrthiWTaldkAQK92FEK32WKo)
+[MEGA 下載](https://mega.nz/file/1jZ22TxQ#pbpeA3wURrN5fg_oAThg3YHU_iE4dO9iOgdVIegF310)
 
 ## 特色
 
@@ -16,12 +16,14 @@
 
 ## 注意事項
 
--   [x] windows螢幕縮放請設定成100%
+-   [x] windows 螢幕縮放請設定成 100%
 -   [x] 不可縮小畫面至工具列
 -   [x] 模擬器的名字必須是"夜神模擬器"
 -   [x] 開始執行後勿再縮放模擬器
 -   [x] 執行時請勿讓電腦進入休眠或睡眠
--   [x] 夜神右方的小工具列最好打開
+-   [x] 夜神右方的小工具列需打開(若測試截圖無法出現請試著更新夜神版本)
+        如下正常
+        ![image](https://github.com/SnaKey0u0/FGO-script/blob/dev/imgs/example.png)
 
 ## 指令說明
 
