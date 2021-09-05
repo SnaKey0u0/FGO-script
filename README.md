@@ -4,7 +4,7 @@
 
 ## EXE 載點
 
-[MEGA 下載](https://mega.nz/file/Im5VlSoY#gnvfAduAO3upIV_F54PMrthiWTaldkAQK92FEK32WKo)
+[MEGA 下載](https://mega.nz/file/1jZ22TxQ#pbpeA3wURrN5fg_oAThg3YHU_iE4dO9iOgdVIegF310)
 
 ## 特色
 
