@@ -131,7 +131,7 @@ def use_ult(step):
 
 def ending_game():
     for i in range(8):
-        click(250, 50)
+        click(int(350*rateX), int(50*rateY)+50)
         time.sleep(0.5)
     # grab_screen_and_click("click_screen")
     # time.sleep(3)
@@ -175,8 +175,10 @@ def summon(n):
     time.sleep(1)
     for i in range(n):
         grab_screen_and_click("confirm")
-        time.sleep(5)
-        click(250, 50)
+        time.sleep(1)
+        for i in range(10):
+            time.sleep(0.5)
+            click(int(350*rateX), int(50*rateY)+50)
         time.sleep(1)
         grab_screen_and_click("cont_summon")
         time.sleep(1)
