@@ -27,13 +27,14 @@ def start_playing(info_obj):
             if not grab_screen_and_click("select_episode1"):
                 first_enter = True
                 if not grab_screen_and_click("select_episode2"):
-                    error("opps! something went wrong, script stop!")
                     error("找不到關卡進入點")
                     return
-            time.sleep(2)
+            time.sleep(1)
             if grab_screen_and_click("apple_page"):
+                time.sleep(1)
                 if not eat_apple(info_obj["apples"]):
                     return
+            time.sleep(2)
             first_refresh = True
             while not grab_screen_and_click(info_obj["server"]):
                 if first_refresh:
@@ -145,8 +146,12 @@ def ending_game():
 
 def eat_apple(apple):
     if apple == "銅蘋果":
-        grab_screen_and_click("scroll_bar")
+        pos = config_data["copper_apple"]
+        click(pos[0], pos[1])
         time.sleep(1)
+        grab_screen_and_click("confirm")
+        time.sleep(1)
+        return True
     if not grab_screen_and_click(apple):
         if not grab_screen_and_click("confirm"):
             info("已進入關卡")
