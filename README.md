@@ -5,7 +5,7 @@
 ## EXE 載點
 
 [MEGA 下載](https://mega.nz/file/1jZ22TxQ#pbpeA3wURrN5fg_oAThg3YHU_iE4dO9iOgdVIegF310)
-[簡易執行影片]](https://youtu.be/c1pqu7dHF70)
+[簡易執行影片](https://youtu.be/c1pqu7dHF70)
 
 ## 特色
 
