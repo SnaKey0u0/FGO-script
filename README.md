@@ -5,6 +5,7 @@
 ## EXE 載點
 
 [MEGA 下載](https://mega.nz/file/1jZ22TxQ#pbpeA3wURrN5fg_oAThg3YHU_iE4dO9iOgdVIegF310)
+[簡易執行影片]](https://youtu.be/c1pqu7dHF70)
 
 ## 特色
 
@@ -25,11 +26,17 @@
         如下正常
         ![image](https://github.com/SnaKey0u0/FGO-script/blob/dev/imgs/example.png)
 
-## 指令說明
+## 腳本說明
 
     開始前可進行截圖測試(會在根目錄生成 myScreen.png)
     各別腳本可至 scripts 資料夾根據模板建立(選擇職階目前沒用)
     loop 留白視為 999 次
+
+    team               => 隊伍，1~10
+    class              => 直接分類，目前沒用
+    server             => imgs資料夾內從者檔名，不用+.png
+    prefer_card        => 戰鬥時偏好的指令卡，可選B, A, Q
+    prefer_weak        => 戰鬥時是否弱點優先，true或false
 
     [1, 2]             => 從者1施放2技(不用選擇目標)
     [1, 2, 3]          => 從者1施放2技給從者3
@@ -41,7 +48,7 @@
 
 ## 有一個麻煩的地方
 
-    若想自行增加好友從者，請將夜神放至最大(非全螢幕)，利用測試截圖功能取得畫面，在利用小畫家或其他工具局部截圖，另存新檔至imgs資料夾內。
+    若想自行增加好友從者，請將夜神放至最大(非全螢幕)，利用測試截圖功能取得畫面，再利用小畫家或其他工具局部截圖，另存新檔至imgs資料夾內。
     之後在script中即可將server設定成該從者的檔名(不用+.png)
 
 ## Todo
