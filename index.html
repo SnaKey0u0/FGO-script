@@ -103,7 +103,7 @@
                     var addRemove = "#field" + next;
                     next = next + 1;
                     var newIn = `<div class="row p-1" id="field${next}">
-                                    <label class="p-2">施放寶具</label>
+                                    <label class="p-2 text-primary">施放寶具順序</label>
                                     <select class="form-control col" id=first-alt${next}>
                                         <option>無</option>
                                         <option>從者1</option>
@@ -143,9 +143,9 @@
                 $("#download").click(function (e) {
                     var dict = {};
                     dict["server"] = $("#server").val();
-                    dict["team"] = $("#team").val();
+                    dict["team"] = parseInt($("#team").val());
                     dict["prefer_card"] = $("#card").val();
-                    dict["prefer_weak"] = true;
+                    dict["prefer_weak"] = $('#weak').is(':checked');
                     var final = [];
                     var term = [];
                     for (let i = 2; i <= next; i++) {
@@ -212,14 +212,14 @@
 
             <div class="form-group" id="field1">
                 <br />
-                <label>從者:</label>
+                <label class="h3">從者:</label>
                 <input type="text" class="form-control" id="server" />
                 <br />
-                <label>隊伍:</label>
+                <label class="h3">隊伍:</label>
                 <br />
                 <input type="number" class="form-control" id="team" value="1" min="1" max="10" />
                 <br />
-                <label>偏好卡色:</label>
+                <label class="h3">偏好卡色:</label>
                 <select class="form-control col" id="card">
                     <option>B</option>
                     <option>A</option>
@@ -227,8 +227,10 @@
                 </select>
                 <br />
                 <div class="form-check">
-                    <label class="form-check-label"> <input type="checkbox" class="form-check-input" value="" checked />弱點優先</label>
+                    <label class="form-check-label"> <input type="checkbox" class="form-check-input" value="" checked id="weak"/>弱點優先</label>
                 </div>
+                <br />
+                <label class="h3">執行指令(施放寶具視為該回合結束):</label>
             </div>
         </div>
     </body>
