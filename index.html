@@ -1,0 +1,235 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>神遊點點點</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var next = 1;
+                $("#add-more").click(function (e) {
+                    e.preventDefault();
+                    var addto = "#field" + next;
+                    var addRemove = "#field" + next;
+                    next = next + 1;
+                    var newIn = `<div class="row p-1" id="field${next}">
+                                    <select class="form-control col" id=server${next}>
+                                        <option>從者1</option>
+                                        <option>從者2</option>
+                                        <option>從者3</option>
+                                    </select>
+                                    <label class="p-2">施放</label>
+                                    <select class="form-control col" id=skill${next}>
+                                        <option>技能1</option>
+                                        <option>技能2</option>
+                                        <option>技能3</option>
+                                    </select>
+                                    <label class="p-2">給</label>
+                                    <select class="form-control col" id=target${next}>
+                                        <option>無</option>
+                                        <option>從者1</option>
+                                        <option>從者2</option>
+                                        <option>從者3</option>
+                                    </select>
+                                    <button id=remove${next} class="btn btn-danger remove-me" >刪除</button>
+                                </div>`;
+
+                    var newInput = $(newIn);
+                    $(addto).after(newInput);
+
+                    $(".remove-me").click(function (e) {
+                        e.preventDefault();
+                        var fieldNum = this.id.substring(6);
+
+                        console.log(fieldNum);
+                        var fieldID = "#field" + fieldNum;
+                        $(this).remove();
+                        $(fieldID).attr("class", "");
+                        $(fieldID).html("");
+                    });
+                });
+
+                $("#add-cloth").click(function (e) {
+                    e.preventDefault();
+                    var addto = "#field" + next;
+                    var addRemove = "#field" + next;
+                    next = next + 1;
+                    var newIn = `<div class="row p-1" id="field${next}">
+                                    <label class="p-2">施放</label>
+                                    <select class="form-control col" id=cloth${next}>
+                                        <option>衣服技能1</option>
+                                        <option>衣服技能2</option>
+                                        <option>衣服技能3</option>
+                                    </select>
+                                    <label class="p-2">給</label>
+                                    <select class="form-control col" id=front${next}>
+                                        <option>無</option>
+                                        <option>從者1</option>
+                                        <option>從者2</option>
+                                        <option>從者3</option>
+                                    </select>
+                                    <label class="p-2">換</label>
+                                    <select class="form-control col" id=back${next}>
+                                        <option>無</option>
+                                        <option>從者4</option>
+                                        <option>從者5</option>
+                                        <option>從者6</option>
+                                    </select>
+                                    <button id=remove${next} class="btn btn-danger remove-me" >刪除</button>
+                                </div>`;
+
+                    var newInput = $(newIn);
+                    $(addto).after(newInput);
+
+                    $(".remove-me").click(function (e) {
+                        e.preventDefault();
+                        var fieldNum = this.id.substring(6);
+
+                        console.log(fieldNum);
+                        var fieldID = "#field" + fieldNum;
+                        $(this).remove();
+                        $(fieldID).attr("class", "");
+                        $(fieldID).html("");
+                    });
+                });
+
+                $("#attack").click(function (e) {
+                    e.preventDefault();
+                    var addto = "#field" + next;
+                    var addRemove = "#field" + next;
+                    next = next + 1;
+                    var newIn = `<div class="row p-1" id="field${next}">
+                                    <label class="p-2">施放寶具</label>
+                                    <select class="form-control col" id=first-alt${next}>
+                                        <option>無</option>
+                                        <option>從者1</option>
+                                        <option>從者2</option>
+                                        <option>從者3</option>
+                                    </select>
+                                    <select class="form-control col" id=second-alt${next}>
+                                        <option>無</option>
+                                        <option>從者1</option>
+                                        <option>從者2</option>
+                                        <option>從者3</option>
+                                    </select>
+                                    <select class="form-control col" id=third-alt${next}>
+                                        <option>無</option>
+                                        <option>從者1</option>
+                                        <option>從者2</option>
+                                        <option>從者3</option>
+                                    </select>
+                                    <button id=remove${next} class="btn btn-danger remove-me" >刪除</button>
+                                </div>`;
+
+                    var newInput = $(newIn);
+                    $(addto).after(newInput);
+
+                    $(".remove-me").click(function (e) {
+                        e.preventDefault();
+                        var fieldNum = this.id.substring(6);
+
+                        console.log(fieldNum);
+                        var fieldID = "#field" + fieldNum;
+                        $(this).remove();
+                        $(fieldID).attr("class", "");
+                        $(fieldID).html("");
+                    });
+                });
+
+                $("#download").click(function (e) {
+                    var dict = {};
+                    dict["server"] = $("#server").val();
+                    dict["team"] = $("#team").val();
+                    dict["prefer_card"] = $("#card").val();
+                    dict["prefer_weak"] = true;
+                    var final = [];
+                    var term = [];
+                    for (let i = 2; i <= next; i++) {
+                        if ($("#field" + i).html() != "") {
+                            ins = [];
+                            if ($("#server" + i).length != 0) {
+                                console.log("指令");
+                                ins.push(parseInt($("#server" + i).val().substring(2,)));
+                                ins.push(parseInt($("#skill" + i).val().substring(2,)));
+                                if($("#target" + i).val()!='無'){
+                                    ins.push(parseInt($("#target" + i).val().substring(2,)));
+                                }
+                                term.push(ins);
+                            } else if ($("#cloth" + i).length != 0) {
+                                console.log("衣服");
+                                ins.push("CLOTH");
+                                ins.push(parseInt($("#cloth" + i).val().substring(4,)));
+                                if($("#front" + i).val()!='無'){
+                                    ins.push(parseInt($("#front" + i).val().substring(2,)));
+                                }
+                                if($("#back" + i).val()!='無'){
+                                    ins.push(parseInt($("#back" + i).val().substring(2,)));
+                                }
+                                term.push(ins);
+                            } else {
+                                console.log("寶具");
+                                ins.push("ATTACK");
+                                if($("#first-alt" + i).val()!='無'){
+                                    ins.push(parseInt($("#first-alt" + i).val().substring(2,)));
+                                }
+                                if($("#second-alt" + i).val()!='無'){
+                                    ins.push(parseInt($("#second-alt" + i).val().substring(2,)));
+                                }
+                                if($("#second-alt" + i).val()!='無'){
+                                    ins.push(parseInt($("#third-alt" + i).val().substring(2,)));
+                                }
+                                term.push(ins);
+                                final.push(term);
+                                term = [];
+                            }
+                        }
+                    }
+                    dict["instructions"] = final;
+                    console.log(dict);
+
+                    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dict));
+                    var downloadAnchorNode = document.createElement('a');
+                    downloadAnchorNode.setAttribute("href", dataStr);
+                    downloadAnchorNode.setAttribute("download", "myScript.json");
+                    document.body.appendChild(downloadAnchorNode); // required for firefox
+                    downloadAnchorNode.click();
+                    downloadAnchorNode.remove();
+                });
+            });
+        </script>
+    </head>
+
+    <body>
+        <div class="container p-1" id="content">
+            <button class="btn btn-outline-primary" id="download">下載</button>
+            <button class="btn btn-outline-primary" id="add-more">新增指令</button>
+            <button class="btn btn-outline-primary" id="add-cloth">新增衣服</button>
+            <button class="btn btn-outline-primary" id="attack">開始戰鬥</button>
+
+            <div class="form-group" id="field1">
+                <br />
+                <label>從者:</label>
+                <input type="text" class="form-control" id="server" />
+                <br />
+                <label>隊伍:</label>
+                <br />
+                <input type="number" class="form-control" id="team" value="1" min="1" max="10" />
+                <br />
+                <label>偏好卡色:</label>
+                <select class="form-control col" id="card">
+                    <option>B</option>
+                    <option>A</option>
+                    <option>Q</option>
+                </select>
+                <br />
+                <div class="form-check">
+                    <label class="form-check-label"> <input type="checkbox" class="form-check-input" value="" checked />弱點優先</label>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
