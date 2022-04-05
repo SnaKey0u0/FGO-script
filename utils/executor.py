@@ -50,6 +50,8 @@ def start_playing(info_obj):
             # 進關前倒數
             time.sleep(3)
             grab_screen_and_click("start_episode")
+            # time.sleep(1)
+            # grab_screen_and_click("noItem")
             for wave in info_obj["instructions"]:
                 if not wait_until("attack"):
                     return
@@ -81,6 +83,8 @@ def start_playing(info_obj):
                 wait_until("click_screen")
                 grab_screen_and_click("click_screen")
                 first_enter = False
+            time.sleep(3)
+            grab_screen_and_click("close")
             wait_until("select_episode1")
         info("腳本結束")
     except:
@@ -130,15 +134,18 @@ def use_ult(step):
 
 
 def ending_game():
+    pos = config_data["next"]
     for i in range(8):
-        click(int(350*rateX), int(50*rateY)+50)
+        click(pos[0], pos[1])
         time.sleep(0.5)
     # grab_screen_and_click("click_screen")
     # time.sleep(3)
     # grab_screen_and_click("click_screen")
     # time.sleep(3)
-    grab_screen_and_click("next")
-    time.sleep(3)
+    # grab_screen_and_click("next")
+    # time.sleep(3)
+    # grab_screen_and_click("next")
+    time.sleep(1)
     if grab_screen_and_click("no_apply"):
         time.sleep(1)
     grab_screen_and_click("close")
