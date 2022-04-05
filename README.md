@@ -4,7 +4,7 @@
 
 ## EXE 載點
 
-[MEGA 下載](https://mega.nz/file/1jZ22TxQ#pbpeA3wURrN5fg_oAThg3YHU_iE4dO9iOgdVIegF310)
+[MEGA 下載](https://mega.nz/file/Ru4xXDDD#1rMFYrDTiHd5s2mnvLcXxLtoBlEJ1mu9_DIZn2knt5g)
 
 ## 腳本製作靜態網頁
 
@@ -56,6 +56,8 @@
 
 ## Todo
 
+    ERROR 活動時不使用道具
+    ERROR 活動獎勵結算畫面
     簡化新增好友助戰的流程(沒好方法就準備ㄘ我的工人智慧)
     選擇職階
     選擇禮裝(FGO活動中已有內建)
