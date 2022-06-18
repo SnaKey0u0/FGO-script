@@ -4,7 +4,7 @@
 
 ## EXE 載點
 
-[MEGA 下載](https://mega.nz/file/Ru4xXDDD#1rMFYrDTiHd5s2mnvLcXxLtoBlEJ1mu9_DIZn2knt5g)
+[MEGA 下載](https://mega.nz/file/42YlCLKZ#s6wEtUOaN9iZ5csixO-DA9v3mifzkiYCHWunjMl94Fw)
 
 ## 腳本製作靜態網頁
 
@@ -71,6 +71,10 @@
 GUI=>EXE(優化中)
 APP(放棄)
 ```
+
+## 備註
+
+    pyinstaller -F main.py -w --icon=fgo.ico
 
 ## 圖片來源
 

@@ -34,7 +34,7 @@ def start_playing(info_obj):
                 time.sleep(1)
                 if not eat_apple(info_obj["apples"]):
                     return
-            time.sleep(2)
+            time.sleep(5)
             first_refresh = True
             while not grab_screen_and_click(info_obj["server"]):
                 if first_refresh:
