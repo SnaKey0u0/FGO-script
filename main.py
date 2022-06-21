@@ -77,7 +77,8 @@ def load_and_set():
     info(rateY)
     if width != 1920:
         for k, v in config_data.items():
-            config_data[k] = [int(v[0]-47)*rateX+2, int(v[1]-32)*rateY+32]
+            if k not in ["skills_time","transitions_time","switch_servant"]:
+                config_data[k] = [int(v[0]-47)*rateX+2, int(v[1]-32)*rateY+32]
     set_executor(config_data, rateX, rateY)
     set_monitor(config_data, rateX, rateY)
 

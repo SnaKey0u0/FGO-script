@@ -4,7 +4,7 @@
 
 ## EXE 載點
 
-[MEGA 下載](https://mega.nz/file/42YlCLKZ#s6wEtUOaN9iZ5csixO-DA9v3mifzkiYCHWunjMl94Fw)
+[MEGA 下載](https://mega.nz/file/B2Bj1CKC#bf_uWZAsVVU190YPp30jiEj-VwKwiTBFZft7TZ-_LDU)
 
 ## 腳本製作靜態網頁
 
@@ -48,6 +48,12 @@
     ["CLOTH", 3, 2, 6] => 換人禮裝專用，從者2換從者6
     ["ATTACK", 1]      => 開始戰鬥，從者1施放寶具
     ["ATTACK", 1, 2]   => 開始戰鬥，從者1、從者2施放寶具
+
+    positions_config裡可以調整各情況等待的時間
+    skills_time        => 施放技能等待時間，包含從者技能、從者寶具、衣服技能(不包含換人)
+    transitions_time   => 過場時間，包含選隊、選角
+    switch_servant     => 換人等待時間
+
 
 ## 有一個麻煩的地方
 

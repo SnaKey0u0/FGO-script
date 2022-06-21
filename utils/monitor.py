@@ -67,7 +67,7 @@ def match_img(myScreen, target_filename):
     h = target_img.shape[0]
 
     # 過濾門檻
-    threshold = .60
+    threshold = .70
 
     # 選最像的地方
     if (target_filename == "confirm" or target_filename == "close" or target_filename == "yes"):

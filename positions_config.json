@@ -35,5 +35,8 @@
     "gift": [600, 605],
     "copper_apple": [940, 820],
     "skip": [1720, 90],
-    "next": [1580, 975]
+    "next": [1580, 975],
+    "skills_time":4,
+    "transitions_time":5,
+    "switch_servant":8
 }
