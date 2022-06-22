@@ -203,7 +203,6 @@ def gift(n):
             count += 1
             if count % 30 == 0:
                 count = 0
-                time.sleep(1)
                 if has_img("1gift"):
                     break
                 if has_img("move_to_box"):

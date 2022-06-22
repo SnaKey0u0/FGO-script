@@ -4,7 +4,7 @@
 
 ## EXE 載點
 
-[MEGA 下載](https://mega.nz/file/B2Bj1CKC#bf_uWZAsVVU190YPp30jiEj-VwKwiTBFZft7TZ-_LDU)
+[MEGA 下載](https://mega.nz/file/crxmCSJT#kY5XOXpM-wlHYNAJ1JIax-PF6WEjX-OnHyDxlCe35kk)
 
 ## 腳本製作靜態網頁
 
