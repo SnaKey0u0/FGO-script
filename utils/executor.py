@@ -30,11 +30,11 @@ def start_playing(info_obj):
                     error("找不到關卡進入點")
                     return
             time.sleep(1)
-            if grab_screen_and_click("apple_page"):
+            if has_img("apple_page"):
                 time.sleep(1)
                 if not eat_apple(info_obj["apples"]):
                     return
-            time.sleep(2)
+            time.sleep(config_data["transitions_time"]) # 等待進入選角
             first_refresh = True
             while not grab_screen_and_click(info_obj["server"]):
                 if first_refresh:
@@ -44,11 +44,10 @@ def start_playing(info_obj):
                 grab_screen_and_click("refresh")
                 time.sleep(1)
                 grab_screen_and_click("yes")
-                time.sleep(4)
-            time.sleep(2)
+                time.sleep(config_data["transitions_time"]) # 等待刷新選角
+            time.sleep(config_data["transitions_time"]) # 等待進入隊伍畫面
             select_team(info_obj["team"])
-            # 進關前倒數
-            time.sleep(3)
+            time.sleep(3) # 進關前倒數
             grab_screen_and_click("start_episode")
             # time.sleep(1)
             # grab_screen_and_click("noItem")
@@ -68,12 +67,11 @@ def start_playing(info_obj):
                     else:
                         pos = config_data["skill"+str(step[0])+str(step[1])]
                         click(pos[0], pos[1])
-                        time.sleep(1)
-                        # 指定技
-                        if (len(step) == 3):
+                        if (len(step) == 3): # 指定技
+                            time.sleep(1) # 等待開啟選技能施放目標畫面
                             pos = config_data["select"+str(step[2])]
                             click(pos[0], pos[1])
-                        time.sleep(4)
+                        time.sleep(config_data["skills_time"])
             if not wait_until("click_screen"):
                 return
             ending_game()
@@ -83,7 +81,7 @@ def start_playing(info_obj):
                 wait_until("click_screen")
                 grab_screen_and_click("click_screen")
                 first_enter = False
-            time.sleep(3)
+            time.sleep(3) # 等待是否有送出交友申請
             grab_screen_and_click("close")
             wait_until("select_episode1")
         info("腳本結束")
@@ -102,6 +100,7 @@ def use_cloth(step):
     if len(step) == 2:
         pos = config_data["select"+str(step[1])]
         click(pos[0], pos[1])
+        time.sleep(config_data["skills_time"])
 
     # 換人
     elif len(step) == 3:
@@ -113,14 +112,13 @@ def use_cloth(step):
         click(pos[0], pos[1])
         time.sleep(1)
         grab_screen_and_click("switch")
-        time.sleep(2)
-    time.sleep(4)
+        time.sleep(config_data["switch_servant"])
 
 
 def use_ult(step):
     while not grab_screen_and_click("attack"):
         time.sleep(1)
-    time.sleep(4)
+    time.sleep(config_data["skills_time"])
     for ult in step:
         info("使用寶具 "+str(ult))
         pos = config_data["ult"+str(ult)]
@@ -138,13 +136,6 @@ def ending_game():
     for i in range(8):
         click(pos[0], pos[1])
         time.sleep(0.5)
-    # grab_screen_and_click("click_screen")
-    # time.sleep(3)
-    # grab_screen_and_click("click_screen")
-    # time.sleep(3)
-    # grab_screen_and_click("next")
-    # time.sleep(3)
-    # grab_screen_and_click("next")
     time.sleep(1)
     if grab_screen_and_click("no_apply"):
         time.sleep(1)
@@ -160,16 +151,11 @@ def eat_apple(apple):
         time.sleep(1)
         return True
     if not grab_screen_and_click(apple):
-        if not grab_screen_and_click("confirm"):
-            info("已進入關卡")
-            time.sleep(1)
-            return True
-        else:
-            error("沒有蘋果剩下，結束腳本")
-            return False
+        error("沒有蘋果剩下，結束腳本")
+        return False
     time.sleep(1)
     grab_screen_and_click("confirm")
-    time.sleep(4)
+    time.sleep(1)
     return True
 
 
@@ -183,8 +169,8 @@ def summon(n):
     for i in range(n):
         grab_screen_and_click("confirm")
         time.sleep(1)
-        for i in range(10):
-            time.sleep(0.5)
+        for i in range(20):
+            time.sleep(0.3)
             click(int(350*rateX), int(50*rateY)+50)
         time.sleep(1)
         grab_screen_and_click("cont_summon")
@@ -204,7 +190,7 @@ def gift(n):
             if not grab_screen_and_click("refresh_box"):
                 error("請至抽箱畫面")
                 return
-            else:
+            else: # 重製箱子
                 time.sleep(1)
                 grab_screen_and_click("do_it")
                 time.sleep(2)
@@ -213,12 +199,13 @@ def gift(n):
         count = 0
         while True:
             click(pos[0], pos[1])
-            time.sleep(0.5)
+            time.sleep(0.3)
             count += 1
-            if count % 10 == 0:
-                if grab_screen_and_click("1gift"):
+            if count % 30 == 0:
+                count = 0
+                if has_img("1gift"):
                     break
-                if grab_screen_and_click("move_to_box"):
+                if has_img("move_to_box"):
                     full_flag = True
                     break
         if full_flag:

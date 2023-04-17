@@ -4,7 +4,7 @@
 
 ## EXE 載點
 
-[MEGA 下載](https://mega.nz/file/Ru4xXDDD#1rMFYrDTiHd5s2mnvLcXxLtoBlEJ1mu9_DIZn2knt5g)
+[MEGA 下載](https://mega.nz/file/crxmCSJT#kY5XOXpM-wlHYNAJ1JIax-PF6WEjX-OnHyDxlCe35kk)
 
 ## 腳本製作靜態網頁
 
@@ -49,6 +49,12 @@
     ["ATTACK", 1]      => 開始戰鬥，從者1施放寶具
     ["ATTACK", 1, 2]   => 開始戰鬥，從者1、從者2施放寶具
 
+    positions_config裡可以調整各情況等待的時間
+    skills_time        => 施放技能等待時間，包含從者技能、從者寶具、衣服技能(不包含換人)
+    transitions_time   => 過場時間，包含選隊、選角
+    switch_servant     => 換人等待時間
+
+
 ## 有一個麻煩的地方
 
     若想自行增加好友從者，請將夜神放至最大(非全螢幕)，利用測試截圖功能取得畫面，再利用小畫家或其他工具局部截圖，另存新檔至imgs資料夾內。
@@ -71,6 +77,10 @@
 GUI=>EXE(優化中)
 APP(放棄)
 ```
+
+## 備註
+
+    pyinstaller -F main.py -w --icon=fgo.ico
 
 ## 圖片來源
 

@@ -67,7 +67,7 @@ def match_img(myScreen, target_filename):
     h = target_img.shape[0]
 
     # 過濾門檻
-    threshold = .60
+    threshold = .70
 
     # 選最像的地方
     if (target_filename == "confirm" or target_filename == "close" or target_filename == "yes"):
@@ -110,9 +110,7 @@ def wait_until(target_filename):
             # cv2.imwrite("ggFuck.png", myScreen)
             error("過場中斷，可能是網路不穩定或電腦卡頓")
             return False
-        myScreen = grab_screen()
-        rectangles = match_img(myScreen, target_filename)
-        if len(rectangles) > 0:
+        if has_img(target_filename):
             if target_filename == "wave":
                 info("enter a new wave")
                 time.sleep(8)
@@ -123,9 +121,15 @@ def wait_until(target_filename):
                 info("ending game")
                 time.sleep(1)
             return True
-        time.sleep(0.3)
+        time.sleep(1)
 
-
+def has_img(target_filename):
+    myScreen = grab_screen()
+    rectangles = match_img(myScreen, target_filename)
+    if len(rectangles) > 0:
+        return True
+    else:
+        return False
 # def switch_server(front, back):
 #     # 目前沒用
 #     myScreen = grab_screen()
